@@ -1,0 +1,15 @@
+{
+  "name": "node-rest-api",
+  "version": "1.0.0",
+  "description": "REST API with nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive --timeout 10000 --exit build/test"
+  },
+  "keywords": [
+    "typescript",
+    "node"
+  ],
+  "author": "davydocsurg",
+  "license": "ISC"
+}
