@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 // Uncaught Exceptions
 process.on("uncaughtException", (err) => {
+    Logging.error(err);
     process.exit(1);
 });
 
