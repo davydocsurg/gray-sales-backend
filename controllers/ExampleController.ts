@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { Logging } from "../helpers";
 import { Example } from "../models";
 
 class ExampleController {
@@ -7,6 +8,7 @@ class ExampleController {
     }
 
     async createExample(req: Request, res: Response, next: NextFunction) {
+        Logging.info("creating...");
         let example = await Example.create({
             title: req.body.title,
             description: req.body.description,
