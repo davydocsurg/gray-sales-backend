@@ -25,6 +25,6 @@ const ExampleSchema: Schema = new mongoose.Schema(
     }
 );
 
-const Todo = mongoose.model("Example", ExampleSchema);
+const Example = mongoose.model("Example", ExampleSchema);
 
-export default Todo;
+export default Example;
