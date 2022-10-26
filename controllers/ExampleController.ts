@@ -8,18 +8,21 @@ class ExampleController {
     }
 
     async createExample(req: Request, res: Response, next: NextFunction) {
-        Logging.info("creating...");
-        let example = await Example.create({
-            title: req.body.title,
-            description: req.body.description,
-        });
-        res.status(200).json({
-            success: true,
-            results: 1,
-            data: {
-                example,
-            },
-        });
+        try {
+            let example = await Example.create({
+                title: req.body.title,
+                description: req.body.description,
+            });
+            res.status(200).json({
+                success: true,
+                results: 1,
+                data: {
+                    example,
+                },
+            });
+        } catch (err) {
+            Logging.error(err);
+        }
     }
 }
 
