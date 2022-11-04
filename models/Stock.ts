@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const ExampleSchema: Schema = new mongoose.Schema(
+const StockSchema: Schema = new mongoose.Schema(
     {
         title: {
             type: String,
@@ -25,6 +25,6 @@ const ExampleSchema: Schema = new mongoose.Schema(
     }
 );
 
-const Example = mongoose.model("Example", ExampleSchema);
+const Stock = mongoose.model("Stock", StockSchema);
 
-export default Example;
+export default Stock;

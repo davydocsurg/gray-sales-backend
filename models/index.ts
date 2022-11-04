@@ -1,3 +1,4 @@
-import Example from "./Example";
+import Stock from "./Stock";
+import Category from "./Category";
 
-export { Example };
+export { Stock, Category };

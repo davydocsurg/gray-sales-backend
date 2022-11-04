@@ -1,7 +1,7 @@
 {
-    "name": "node-rest-api",
+    "name": "gray-sales-backend",
     "version": "1.0.0",
-    "description": "REST API with nodejs",
+    "description": "GraySales Backend",
     "main": "index.ts",
     "scripts": {
         "dev": "ts-node-dev --respawn --transpile-only index.ts",
@@ -9,7 +9,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/davydocsurg/node-rest-api"
+        "url": "https://github.com/davydocsurg/gray-sales-backend"
     },
     "keywords": [
         "typescript",
