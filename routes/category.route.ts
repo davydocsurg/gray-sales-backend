@@ -11,4 +11,6 @@ categoryRoutes.post(
     catchAsync(CategoryController.createCategory)
 );
 
+categoryRoutes.get("/fetch", catchAsync(CategoryController.fetchCategories));
+
 export default categoryRoutes;
