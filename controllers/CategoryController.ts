@@ -7,6 +7,9 @@ class CategoryController {
     constructor() {
         this.createCategory = this.createCategory.bind(this);
         this.fetchCategories = this.fetchCategories.bind(this);
+        this.fetchCategory = this.fetchCategory.bind(this);
+        this.updateCategory = this.updateCategory.bind(this);
+        this.deleteCategory = this.deleteCategory.bind(this);
     }
 
     async fetchCategories(req: Request, res: Response, next: NextFunction) {

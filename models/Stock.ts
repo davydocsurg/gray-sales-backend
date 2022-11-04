@@ -4,10 +4,10 @@ const StockSchema: Schema = new mongoose.Schema(
     {
         title: {
             type: String,
-            required: [true, "The title field is required"],
+            required: [true, "Title field is required"],
             minlength: [
-                5,
-                "Title is shorter than the minimum allowed length (5)",
+                3,
+                "Title is shorter than the minimum allowed length (3)",
             ],
         },
 
@@ -18,6 +18,22 @@ const StockSchema: Schema = new mongoose.Schema(
                 10,
                 "Description is shorter than the minimum allowed length (10)",
             ],
+        },
+
+        price: {
+            type: Number,
+            required: [true, "Price field is required"],
+        },
+
+        images: {
+            type: String,
+            required: [true, "Image field is required"],
+        },
+
+        categoryId: {
+            type: Schema.Types.ObjectId,
+            ref: "Category",
+            required: true,
         },
     },
     {
