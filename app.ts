@@ -23,11 +23,12 @@ app.use(express.json());
 app.use(express.static("public"));
 app.get("/", (req: Request, res: Response) => {
     res.status(200).json({
-        message: "You have reached Example api home page",
+        message: "You have reached Gray Sales api home page",
         success: true,
     });
 });
-app.use("/category", categoryRoutes);
+app.use("/api/category", categoryRoutes);
+
 app.use(errorHandler);
 
 export default app;

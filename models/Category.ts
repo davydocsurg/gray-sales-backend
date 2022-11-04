@@ -12,9 +12,9 @@ const CategorySchema: Schema = new mongoose.Schema(
             required: [true, "Label is required"],
         },
 
-        backgoundColor: {
+        backgroundColor: {
             type: String,
-            required: [true, "Backgound color is required"],
+            required: [true, "Background color is required"],
         },
 
         value: {
