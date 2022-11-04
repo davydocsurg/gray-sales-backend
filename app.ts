@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import { errorHandler } from "./middlewares";
-import exampleRoutes from "./routes/example.route";
+import categoryRoutes from "./routes/category.route";
 
 const app: Express = express();
 const allowlist = ["http://localhost:3000", process.env.FRONT_END_URL];
@@ -27,7 +27,7 @@ app.get("/", (req: Request, res: Response) => {
         success: true,
     });
 });
-app.use("/api", exampleRoutes);
+app.use("/category", categoryRoutes);
 app.use(errorHandler);
 
 export default app;
