@@ -17,10 +17,10 @@ const ValidateCreateStockRequest = (
                 })
                 .withMessage("Title is required")
                 .custom(async (value) => {
-                    const title = await Stock.findOne({
-                        where: { name: value },
+                    const data = await Stock.findOne({
+                        where: { title: value },
                     });
-                    if (title) {
+                    if (data?.title == value) {
                         return Promise.reject("Title already taken");
                     }
                 }),

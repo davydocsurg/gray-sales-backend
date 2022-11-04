@@ -5,14 +5,15 @@ import { ValidateCreateStockRequest } from "../middlewares/validators";
 
 const stockRoutes = express.Router();
 
+stockRoutes.get("/fetch", catchAsync(StockController.fetchStocks));
+
 stockRoutes.post(
     "/create",
     ValidateCreateStockRequest,
     catchAsync(StockController.createStock)
 );
 
-// stockRoutes.get("/fetch", catchAsync(CategoryController.fetchCategories));
-// stockRoutes.get("/:catId", catchAsync(CategoryController.fetchCategory));
+stockRoutes.get("/:stockId", catchAsync(StockController.fetchStock));
 // stockRoutes.put(
 //     "/:catId/update",
 //     catchAsync(CategoryController.updateCategory)
