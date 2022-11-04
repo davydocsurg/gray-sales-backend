@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import { errorHandler } from "./middlewares";
-import categoryRoutes from "./routes/category.route";
+import { categoryRoutes, stockRoutes } from "./routes";
 
 const app: Express = express();
 const allowlist = ["http://localhost:3000", process.env.FRONT_END_URL];
@@ -28,6 +28,7 @@ app.get("/", (req: Request, res: Response) => {
     });
 });
 app.use("/api/category", categoryRoutes);
+app.use("/api/stock", stockRoutes);
 
 app.use(errorHandler);
 

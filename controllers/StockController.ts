@@ -24,7 +24,7 @@ class StockController {
                     stock,
                 },
             });
-        } catch (err) {
+        } catch (err: unknown) {
             Logging.error(err);
             return res.json({
                 success: false,
