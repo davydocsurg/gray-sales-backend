@@ -14,13 +14,7 @@ stockRoutes.post(
 );
 
 stockRoutes.get("/:stockId", catchAsync(StockController.fetchStock));
-// stockRoutes.put(
-//     "/:catId/update",
-//     catchAsync(CategoryController.updateCategory)
-// );
-// stockRoutes.delete(
-//     "/:catId/delete",
-//     catchAsync(CategoryController.deleteCategory)
-// );
+stockRoutes.put("/:stockId/update", catchAsync(StockController.updateStock));
+stockRoutes.delete("/:stockId/delete", catchAsync(StockController.deleteStock));
 
 export default stockRoutes;
