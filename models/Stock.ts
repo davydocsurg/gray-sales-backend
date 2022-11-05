@@ -26,7 +26,7 @@ const StockSchema: Schema = new mongoose.Schema(
         },
 
         images: {
-            type: String,
+            type: Array,
             required: [true, "Image field is required"],
         },
 

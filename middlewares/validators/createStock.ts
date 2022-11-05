@@ -2,6 +2,7 @@ import { check } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 import validate from "./validate";
 import { Category, Stock } from "../../models";
+import { Logging } from "../../helpers";
 
 const ValidateCreateStockRequest = (
     req: Request,
@@ -18,9 +19,13 @@ const ValidateCreateStockRequest = (
                 .withMessage("Title is required")
                 .custom(async (value) => {
                     const data = await Stock.findOne({
-                        where: { title: value },
+                        where: {
+                            title: value,
+                        },
                     });
+
                     if (data?.title == value) {
+                        Logging.info(data?.title + "...." + value);
                         return Promise.reject("Title already taken");
                     }
                 }),

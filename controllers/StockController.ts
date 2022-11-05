@@ -18,7 +18,7 @@ class StockController {
         }
         try {
             const stocksCount = await Stock.find().countDocuments();
-            const stocks = await Stock.find();
+            const stocks = await (await Stock.find()).reverse();
 
             if (!stocksCount) {
                 return res.json({
