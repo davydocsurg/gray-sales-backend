@@ -1,7 +1,11 @@
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
+import multer from "multer";
+
 import { errorHandler } from "./middlewares";
 import { categoryRoutes, stockRoutes } from "./routes";
+import path from "path";
+import { fileStorage, fileValidation } from "./helpers";
 
 const app: Express = express();
 const allowlist = ["http://localhost:3000", process.env.FRONT_END_URL];
@@ -27,6 +31,16 @@ app.get("/", (req: Request, res: Response) => {
         success: true,
     });
 });
+
+app.use(
+    multer({ storage: fileStorage, fileFilter: fileValidation }).array("images")
+);
+app.use(express.static(path.join(__dirname, "public")));
+app.use(
+    "/public/stocks/images",
+    express.static(path.join(__dirname, "public/stocks/images"))
+);
+
 app.use("/api/category", categoryRoutes);
 app.use("/api/stock", stockRoutes);
 

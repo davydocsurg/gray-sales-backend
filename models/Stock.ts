@@ -25,9 +25,9 @@ const StockSchema: Schema = new mongoose.Schema(
             required: [true, "Price field is required"],
         },
 
-        images: {
+        imageUrl: {
             type: Array,
-            required: [true, "Image field is required"],
+            required: [true, "Images field is required"],
         },
 
         categoryId: {

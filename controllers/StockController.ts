@@ -18,7 +18,7 @@ class StockController {
         }
         try {
             const stocksCount = await Stock.find().countDocuments();
-            const stocks = await (await Stock.find()).reverse();
+            const stocks = (await Stock.find()).reverse();
 
             if (!stocksCount) {
                 return res.json({
@@ -44,12 +44,20 @@ class StockController {
 
     async createStock(req: Request, res: Response, next: NextFunction) {
         try {
+            const title = req.body.title;
+            const description = req.body.description;
+            const price = req.body.price;
+            const imageUrl = req.body.imageUrl;
+            const categoryId = req.body.categoryId;
+
+            // const imageUrl = images?.path;
+            Logging.info(imageUrl);
             const stock = await Stock.create({
-                title: req.body.title,
-                description: req.body.description,
-                price: req.body.price,
-                images: req.body.images,
-                categoryId: req.body.categoryId,
+                title,
+                description,
+                price,
+                imageUrl,
+                categoryId,
             });
 
             return res.status(200).json({

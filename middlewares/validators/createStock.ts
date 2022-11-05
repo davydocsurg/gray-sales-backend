@@ -41,7 +41,7 @@ const ValidateCreateStockRequest = (
                     checkFalsy: true,
                 })
                 .withMessage("Price is required"),
-            check("images")
+            check("imageUrl")
                 .exists({
                     checkNull: true,
                     checkFalsy: true,
