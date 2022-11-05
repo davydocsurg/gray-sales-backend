@@ -47,16 +47,16 @@ class StockController {
             const title = req.body.title;
             const description = req.body.description;
             const price = req.body.price;
-            const imageUrl = req.body.imageUrl;
+            const images = req.file;
             const categoryId = req.body.categoryId;
 
-            // const imageUrl = images?.path;
+            const imageUrl = images?.path;
             Logging.info(imageUrl);
             const stock = await Stock.create({
                 title,
                 description,
                 price,
-                imageUrl,
+                images: imageUrl,
                 categoryId,
             });
 

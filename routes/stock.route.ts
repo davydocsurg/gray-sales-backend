@@ -9,7 +9,7 @@ stockRoutes.get("/fetch", catchAsync(StockController.fetchStocks));
 
 stockRoutes.post(
     "/create",
-    ValidateCreateStockRequest,
+    // ValidateCreateStockRequest,
     catchAsync(StockController.createStock)
 );
 
