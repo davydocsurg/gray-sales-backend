@@ -1,4 +1,5 @@
 import ValidateCreateCategoryRequest from "./createCategory";
+import ValidateCreateStockRequest from "./createStock";
 import validate from "./validate";
 
-export { ValidateCreateCategoryRequest, validate };
+export { ValidateCreateCategoryRequest, ValidateCreateStockRequest, validate };

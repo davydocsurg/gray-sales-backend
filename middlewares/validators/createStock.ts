@@ -1,9 +1,10 @@
 import { check } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 import validate from "./validate";
-import { Stock } from "../../models";
+import { Category, Stock } from "../../models";
+import { Logging } from "../../helpers";
 
-const ValidateCreateCategoryRequest = (
+const ValidateCreateStockRequest = (
     req: Request,
     res: Response,
     next: NextFunction
@@ -15,37 +16,48 @@ const ValidateCreateCategoryRequest = (
                     checkNull: true,
                     checkFalsy: true,
                 })
+                .withMessage("Title is required")
                 .custom(async (value) => {
-                    const title = await Stock.findOne({
-                        where: { title: value },
+                    const data = await Stock.findOne({
+                        where: {
+                            title: value,
+                        },
                     });
-                    if (title) {
+
+                    if (data?.title == value) {
+                        Logging.info(data?.title + "...." + value);
                         return Promise.reject("Title already taken");
                     }
-                })
-                .withMessage("Title is required"),
+                }),
             check("description")
                 .exists({
                     checkNull: true,
                     checkFalsy: true,
                 })
                 .withMessage("Description is required"),
-            check("backgroundColor")
+            check("price")
                 .exists({
                     checkNull: true,
                     checkFalsy: true,
                 })
-                .withMessage("Background color is required"),
-            check("value")
+                .withMessage("Price is required"),
+            check("images")
                 .exists({
                     checkNull: true,
                     checkFalsy: true,
                 })
-                .withMessage("Value is required"),
+                .withMessage("Minimum of one image is required"),
+
+            check("categoryId")
+                .exists({
+                    checkNull: true,
+                    checkFalsy: true,
+                })
+                .withMessage("Category is required"),
         ],
         req,
         res,
         next
     );
 };
-export default ValidateCreateCategoryRequest;
+export default ValidateCreateStockRequest;
