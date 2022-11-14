@@ -51,7 +51,6 @@ class StockController {
             const categoryId = req.body.categoryId;
 
             const imageUrl = images?.path;
-            Logging.info(imageUrl);
             const stock = await Stock.create({
                 title,
                 description,
@@ -59,6 +58,7 @@ class StockController {
                 images: imageUrl,
                 categoryId,
             });
+            // Logging.info(stock);
 
             return res.status(200).json({
                 success: true,

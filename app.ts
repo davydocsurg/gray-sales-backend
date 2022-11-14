@@ -6,6 +6,7 @@ import { errorHandler } from "./middlewares";
 import { categoryRoutes, stockRoutes } from "./routes";
 import path from "path";
 import { fileStorage, fileValidation } from "./helpers";
+import authRoutes from "./routes/auth.route";
 
 const app: Express = express();
 const allowlist = ["http://localhost:3000", process.env.FRONT_END_URL];
@@ -43,6 +44,7 @@ app.use(
     express.static(path.join(__dirname, "public/stocks/images"))
 );
 
+app.use("/api", authRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/stock", stockRoutes);
 
