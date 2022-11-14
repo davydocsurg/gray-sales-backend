@@ -11,4 +11,6 @@ authRoutes.post(
     catchAsync(AuthController.createUser)
 );
 
+authRoutes.post("/login", catchAsync(AuthController.login));
+
 export default authRoutes;
