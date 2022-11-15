@@ -25,6 +25,8 @@ const corsOptionsDelegate = function (
 
 app.use(cors(corsOptionsDelegate));
 app.use(express.json());
+app.use(express.urlencoded());
+
 app.use(express.static("public"));
 app.get("/", (req: Request, res: Response) => {
     res.status(200).json({
@@ -34,9 +36,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use(
-    multer({ storage: fileStorage, fileFilter: fileValidation }).single(
-        "images"
-    )
+    multer({ storage: fileStorage, fileFilter: fileValidation }).array("images")
 );
 app.use(express.static(path.join(__dirname, "public")));
 app.use(

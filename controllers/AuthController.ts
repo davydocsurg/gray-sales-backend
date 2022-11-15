@@ -17,8 +17,13 @@ class AuthController {
             const email = req.body.email;
             const password = req.body.password;
 
-            await checkUser(email, res, next);
-
+            const userExists = await checkUser(email, res, next);
+            if (userExists) {
+                return res.status(409).json({
+                    success: false,
+                    message: "User Already Exist. Please Login",
+                });
+            }
             const hashedPwd = await bcrypt.hash(password, 12);
 
             const user = await User.create({

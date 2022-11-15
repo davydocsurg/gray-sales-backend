@@ -17,13 +17,10 @@ export const checkUser = async (
 ) => {
     const user = await findUserByEmail(email);
     if (user) {
-        return res.status(409).json({
-            success: false,
-            message: "User Already Exist. Please Login",
-        });
+        return true;
     }
 
-    return next();
+    return false;
 };
 
 export const verifyUserLoginDetails = async (

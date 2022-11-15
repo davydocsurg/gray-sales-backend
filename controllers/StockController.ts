@@ -51,11 +51,12 @@ class StockController {
             const categoryId = req.body.categoryId;
 
             const imageUrl = images?.path;
+            Logging.info(req.body);
             const stock = await Stock.create({
                 title,
                 description,
                 price,
-                images: imageUrl,
+                images,
                 categoryId,
             });
             // Logging.info(stock);
