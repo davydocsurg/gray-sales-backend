@@ -32,13 +32,10 @@ export const verifyUserLoginDetails = async (
     const user = await findUserByEmail(email);
 
     if (!user) {
-        return res.json({
-            success: false,
-            message: "User does not exist. Please Register",
-        });
+        return null;
     }
     await validatePassword(user, password, res, next);
-    // next();
+
     return user;
 };
 
@@ -52,6 +49,7 @@ const validatePassword = async (
         password?.trim(),
         user?.password.trim()
     );
+
     if (!comparePwd) {
         return res.json({
             success: false,
@@ -60,7 +58,7 @@ const validatePassword = async (
         });
     }
 
-    return next();
+    // return next();
 };
 
 const findUserByEmail = async (email: undefined) => {

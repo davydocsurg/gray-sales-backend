@@ -3,7 +3,7 @@ import cors from "cors";
 import multer from "multer";
 
 import { errorHandler } from "./middlewares";
-import { categoryRoutes, stockRoutes } from "./routes";
+import { categoryRoutes, stockRoutes, userRoutes } from "./routes";
 import path from "path";
 import { fileStorage, fileValidation } from "./helpers";
 import authRoutes from "./routes/auth.route";
@@ -47,6 +47,7 @@ app.use(
 app.use("/api", authRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/stock", stockRoutes);
+app.use("/api", userRoutes);
 
 app.use(errorHandler);
 

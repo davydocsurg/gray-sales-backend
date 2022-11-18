@@ -9,6 +9,7 @@ import { verifyUserLoginDetails } from "../helpers/user";
 class AuthController {
     constructor() {
         this.createUser = this.createUser.bind(this);
+        this.login = this.login.bind(this);
     }
 
     async createUser(req: Request, res: Response, next: NextFunction) {
@@ -57,17 +58,32 @@ class AuthController {
                 res,
                 next
             );
-            jwt.sign({ user: user }, "secretKey", (err, token: any) => {
+
+            if (user == null) {
                 return res.json({
-                    success: true,
-                    message: "Login successful",
-                    data: {
-                        user,
-                        token: token,
-                    },
+                    success: false,
+                    message: "User does not exist. Please Register",
                 });
-            });
-        } catch (error) {
+            }
+
+            jwt.sign(
+                { user: user },
+                "secretKey",
+                (err: unknown, token: unknown) => {
+                    if (err) {
+                        return Logging.error(err);
+                    }
+                    return res.json({
+                        success: true,
+                        message: "Login successful",
+                        data: {
+                            user,
+                            token: token,
+                        },
+                    });
+                }
+            );
+        } catch (error: unknown) {
             Logging.error(error);
             return res.json({
                 errors: {
