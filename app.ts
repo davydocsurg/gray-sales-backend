@@ -36,7 +36,9 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use(
-    multer({ storage: fileStorage, fileFilter: fileValidation }).array("images")
+    multer({ storage: fileStorage, fileFilter: fileValidation }).single(
+        "images"
+    )
 );
 app.use(express.static(path.join(__dirname, "public")));
 app.use(

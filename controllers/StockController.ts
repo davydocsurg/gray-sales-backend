@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
+// import cloudinary from "cloudinary";
+
+// locals
 import { Logging } from "../helpers";
 import { Stock } from "../models";
 
@@ -44,14 +47,21 @@ class StockController {
 
     async createStock(req: Request, res: Response, next: NextFunction) {
         try {
-            const title = req.body.title;
-            const description = req.body.description;
-            const price = req.body.price;
-            const images = req.file;
-            const categoryId = req.body.categoryId;
+            const stockData = req.body.body._parts;
+            const title = stockData[0][1]; //req.body.title;
+            const description = stockData[1][1]; //req.body.description;
+            const price = stockData[2][1]; //req.body.price;
+            const images = stockData[4][1]; //req.file;
+            const categoryId = stockData[3][1]; //req.body.categoryId;
 
-            const imageUrl = images?.path;
-            Logging.info(req.body);
+            // const title = req.body.title;
+            // const description = req.body.description;
+            // const price = req.body.price;
+            // const images = req.file;
+            // const categoryId = req.body.categoryId;
+
+            // Logging.info(categoryId);
+            // const imageUrl = images?.path;
             const stock = await Stock.create({
                 title,
                 description,
@@ -59,7 +69,6 @@ class StockController {
                 images,
                 categoryId,
             });
-            // Logging.info(stock);
 
             return res.status(200).json({
                 success: true,
