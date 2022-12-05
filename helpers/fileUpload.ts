@@ -1,9 +1,11 @@
 import { Request } from "express";
 import multer from "multer";
 import cloudinary from "cloudinary";
+import Logging from "./customLog";
 
 export const fileStorage = multer.diskStorage({
     destination: (req: Request, file: any, cb: Function) => {
+        // Logging.info(file);
         cb(null, "public/stocks/images");
     },
 
@@ -13,7 +15,6 @@ export const fileStorage = multer.diskStorage({
 });
 
 export const fileValidation = (req: Request, file: any, cb: Function) => {
-    let fileMimetype = "image/png" || "image/jpg" || "image/jpeg";
     if (file.mimetype == "image/png" || "image/jpg" || "image/jpeg") {
         cb(null, true);
     } else {
@@ -21,19 +22,26 @@ export const fileValidation = (req: Request, file: any, cb: Function) => {
     }
 };
 
-// export const uploadImage = () => {
-//     const options = {
-//         use_filename: true,
-//         unique_filename: false,
-//         overwrite: true,
-//     };
+export const uploadImage = async (images: string) => {
+    try {
+        const options = {
+            use_filename: true,
+            unique_filename: false,
+            overwrite: true,
+        };
 
-//     cloudinary.v2.config({
-//         cloud_name: process.env.CLOUD_STORAGE_NAME,
-//         api_key: process.env.CLOUD_API_KEY,
-//         api_secret: process.env.CLOUD_API_SECRET,
-//     });
+        cloudinary.v2.config({
+            cloud_name: process.env.CLOUD_STORAGE_NAME,
+            api_key: process.env.CLOUD_API_KEY,
+            api_secret: process.env.CLOUD_API_SECRET,
+        });
 
-//     let filesCount = 0;
-//     const uploads: cloudinary.UploadApiResponse[] = [];
-// };
+        let filesCount = 0;
+        const uploads: cloudinary.UploadApiResponse[] = [];
+
+        const result = await cloudinary.v2.uploader.upload(images, options);
+        Logging.info(result);
+    } catch (error) {
+        Logging.error(error);
+    }
+};
