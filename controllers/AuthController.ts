@@ -39,6 +39,7 @@ class AuthController {
             const name = req.body.name;
             const email = req.body.email;
             const password = req.body.password;
+            const passwordConfirmation = req.body.passwordConfirmation;
 
             const userExists = await checkUser(email, res, next);
             if (userExists) {
@@ -47,18 +48,24 @@ class AuthController {
                     message: "User Already Exist. Please Login",
                 });
             }
-            const hashedPwd = await bcrypt.hash(password, 12);
+            // const hashedPwd = await bcrypt.hash(password, 12);
 
             const user = await User.create({
                 name: name,
                 email: email,
-                password: hashedPwd,
+                password: password,
+                passwordConfirmation: passwordConfirmation,
+                type: "vendor",
+                verificationStatus: "unverfied",
             });
+
+            await user.save({ validateBeforeSave: false });
+            Logging.info("hello");
 
             return res.status(200).json({
                 success: true,
-                results: 1,
-                data: { user },
+                message: "Registration successful",
+                data: null,
             });
         } catch (error) {
             Logging.error(error);

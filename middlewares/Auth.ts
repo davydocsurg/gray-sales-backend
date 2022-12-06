@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt, { JsonWebTokenError } from "jsonwebtoken";
 import { promisify } from "util";
 import { JWT_SECRET } from "../commons/constants";
-import { AppError, catchAsync } from "../helpers";
+import { AppError, catchAsync, Logging } from "../helpers";
 import { User } from "../models";
 
 const jwt_key: string = JWT_SECRET;
@@ -30,9 +30,14 @@ const isAuthenticated = catchAsync(
             );
         }
 
+        let payload: any;
         // verify token
-        const payload: any = await promisify(jwt.verify)(token, jwt_key);
-
+        try {
+            payload = jwt.verify(token, jwt_key);
+        } catch (error) {
+            return next(new AppError(error.message, 401));
+        }
+        Logging.warn(`${payload} payload`);
         // check if user still exists in the database
         const currentUser = await User.findById(payload.id);
         if (!currentUser) {

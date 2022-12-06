@@ -3,6 +3,7 @@ import validator from "validator";
 import slugify from "slugify";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import { Logging } from "../helpers";
 
 const UserSchema: Schema = new mongoose.Schema(
     {
@@ -95,6 +96,7 @@ const UserSchema: Schema = new mongoose.Schema(
 );
 
 UserSchema.pre("save", async function (next) {
+    Logging.info(this.id);
     this.slug = slugify(this.name + this.id, { lower: true });
     if (this.isModified("password")) {
         this.password = await bcrypt.hash(this.password, 12);
@@ -111,6 +113,7 @@ UserSchema.pre("save", async function (next) {
 
 UserSchema.pre(/^find/, function (next) {
     this.find({ active: { $ne: false } });
+    next();
 });
 
 UserSchema.methods.checkPassword = async function (
@@ -122,9 +125,12 @@ UserSchema.methods.checkPassword = async function (
 
 UserSchema.methods.changedPasswordAfter = function (token_timestamp: string) {
     if (this.passwordChangedAt) {
-        const changeTimestamp =
-            parseInt(this.passwordChangedAt.getTime(), 10) < changedTimestamp;
+        const changedTimestamp =
+            parseInt(this.passwordChangedAt.getTime(), 10) / 1000;
+        return parseInt(token_timestamp, 10) < changedTimestamp;
     }
+
+    return false;
 };
 
 UserSchema.methods.createPasswordResetToken = function (
