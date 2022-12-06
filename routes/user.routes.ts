@@ -11,4 +11,10 @@ userRoutes.get(
     catchAsync(UserController.getAuthUser)
 );
 
+userRoutes.get(
+    "/stock-owner/:id",
+    isAuthenticated,
+    catchAsync(UserController.findUserById)
+);
+
 export default userRoutes;

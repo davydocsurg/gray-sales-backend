@@ -27,6 +27,30 @@ class UserController {
             });
         }
     }
+
+    async findUserById(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = req.params.id;
+            console.log(id);
+
+            const user = await User.findById(id);
+
+            return res.json({
+                success: true,
+                data: {
+                    user,
+                },
+            });
+        } catch (error: unknown) {
+            Logging.error(error);
+            return res.json({
+                success: false,
+                errors: {
+                    error,
+                },
+            });
+        }
+    }
 }
 
 export default new UserController();

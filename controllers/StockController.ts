@@ -59,6 +59,7 @@ class StockController {
                 price,
                 images,
                 categoryId,
+                user: req?.user,
             });
 
             return res.status(200).json({
