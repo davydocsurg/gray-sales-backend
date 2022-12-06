@@ -1,7 +1,7 @@
 import { NextFunction, Response } from "express";
 import bcrypt from "bcryptjs";
 
-import User from "../models/User";
+import { User } from "../models";
 import Logging from "./customLog";
 import { AppError } from "./appError";
 
@@ -30,12 +30,16 @@ export const verifyUserLoginDetails = async (
     res: Response,
     next: NextFunction
 ) => {
-    const user = await findUserByEmail(email);
+    // const user = await findUserByEmail(email);
+    const user = await User.findOne({ email }).select("+password");
 
-    if (!user) {
-        return null;
+    if (!user || !(await user.checkPassword(password, user.password))) {
+        let errors = {
+            email: "Email or password is incorrect",
+        };
+        return next(new AppError("Incorrect credentials", 422, errors));
     }
-    await validatePassword(user, password, res, next);
+    // await validatePassword(user, password, res, next);
 
     return user;
 };

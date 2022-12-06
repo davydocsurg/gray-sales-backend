@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import { checkUser, Logging } from "../helpers";
+import { AppError, checkUser, Logging } from "../helpers";
 import User from "../models/User";
 import { verifyUserLoginDetails } from "../helpers/user";
 import { cookieOptions, JWT_SECRET } from "../commons/constants";
@@ -18,7 +18,7 @@ const createSendToken = (
     statusCode: number = 200,
     res: Response
 ) => {
-    const token = signToken(user.id, user.type);
+    const token = signToken(user._id, user.type);
     if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
     res.cookie("jwt", token, cookieOptions);
     res.status(statusCode).json({
@@ -72,49 +72,42 @@ class AuthController {
     async login(req: Request, res: Response, next: NextFunction) {
         const { email, password } = req.body;
 
-        try {
-            const user = await verifyUserLoginDetails(
-                email,
-                password,
-                res,
-                next
-            );
+        // const user = await verifyUserLoginDetails(email, password, res, next);
+        // if (user === null) {
+        //     return res.json({
+        //         success: false,
+        //         message: "User does not exist. Please Register",
+        //     });
+        // }
+        const user = await User.findOne({ email }).select("+password");
 
-            if (user === null) {
-                return res.json({
-                    success: false,
-                    message: "User does not exist. Please Register",
-                });
-            }
-            user.password = undefined;
-            req.user = user;
-            createSendToken(user, 200, res);
-
-            // jwt.sign(
-            //     { user: user },
-            //     "secretKey",
-            //     (err: unknown, token: unknown) => {
-            //         if (err) {
-            //             return Logging.error(err);
-            //         }
-            //         return res.json({
-            //             success: true,
-            //             message: "Login successful",
-            //             data: {
-            //                 user,
-            //                 token: token,
-            //             },
-            //         });
-            //     }
-            // );
-        } catch (error: unknown) {
-            Logging.error(error);
-            return res.json({
-                errors: {
-                    error,
-                },
-            });
+        if (!user || !(await user.checkPassword(password, user.password))) {
+            let errors = {
+                email: "Email or password is incorrect",
+            };
+            return next(new AppError("Incorrect credentials", 422, errors));
         }
+        user.password = undefined;
+        req.user = user;
+        createSendToken(user, 200, res);
+
+        // jwt.sign(
+        //     { user: user },
+        //     "secretKey",
+        //     (err: unknown, token: unknown) => {
+        //         if (err) {
+        //             return Logging.error(err);
+        //         }
+        //         return res.json({
+        //             success: true,
+        //             message: "Login successful",
+        //             data: {
+        //                 user,
+        //                 token: token,
+        //             },
+        //         });
+        //     }
+        // );
     }
 }
 
