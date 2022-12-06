@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import multer from "multer";
 
-import { errorHandler } from "./middlewares";
+import { errorHandler, sessionMiddleware } from "./middlewares";
 import { categoryRoutes, stockRoutes, userRoutes } from "./routes";
 import path from "path";
 import { fileStorage, fileValidation } from "./helpers";
@@ -26,6 +26,7 @@ const corsOptionsDelegate = function (
 app.use(cors(corsOptionsDelegate));
 app.use(express.json());
 app.use(express.urlencoded());
+app.use(sessionMiddleware);
 
 app.use(express.static("public"));
 app.get("/", (req: Request, res: Response) => {

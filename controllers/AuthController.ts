@@ -5,6 +5,28 @@ import jwt from "jsonwebtoken";
 import { checkUser, Logging } from "../helpers";
 import User from "../models/User";
 import { verifyUserLoginDetails } from "../helpers/user";
+import { cookieOptions, JWT_SECRET } from "../commons/constants";
+
+const signToken = (id: string, type: string) => {
+    const jwt_key: string = JWT_SECRET;
+    const token = jwt.sign({ id, type }, jwt_key, { expiresIn: "1d" });
+    return token;
+};
+
+const createSendToken = (
+    user: any,
+    statusCode: number = 200,
+    res: Response
+) => {
+    const token = signToken(user.id, user.type);
+    if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
+    res.cookie("jwt", token, cookieOptions);
+    res.status(statusCode).json({
+        success: true,
+        token,
+        user,
+    });
+};
 
 class AuthController {
     constructor() {
@@ -48,8 +70,7 @@ class AuthController {
     }
 
     async login(req: Request, res: Response, next: NextFunction) {
-        const email = req.body.email;
-        const password = req.body.password;
+        const { email, password } = req.body;
 
         try {
             const user = await verifyUserLoginDetails(
@@ -59,30 +80,33 @@ class AuthController {
                 next
             );
 
-            if (user == null) {
+            if (user === null) {
                 return res.json({
                     success: false,
                     message: "User does not exist. Please Register",
                 });
             }
+            user.password = undefined;
+            req.user = user;
+            createSendToken(user, 200, res);
 
-            jwt.sign(
-                { user: user },
-                "secretKey",
-                (err: unknown, token: unknown) => {
-                    if (err) {
-                        return Logging.error(err);
-                    }
-                    return res.json({
-                        success: true,
-                        message: "Login successful",
-                        data: {
-                            user,
-                            token: token,
-                        },
-                    });
-                }
-            );
+            // jwt.sign(
+            //     { user: user },
+            //     "secretKey",
+            //     (err: unknown, token: unknown) => {
+            //         if (err) {
+            //             return Logging.error(err);
+            //         }
+            //         return res.json({
+            //             success: true,
+            //             message: "Login successful",
+            //             data: {
+            //                 user,
+            //                 token: token,
+            //             },
+            //         });
+            //     }
+            // );
         } catch (error: unknown) {
             Logging.error(error);
             return res.json({

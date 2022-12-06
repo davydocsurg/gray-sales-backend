@@ -10,7 +10,7 @@ const options: ConnectMongoOptions = {
 };
 
 export const sessionMiddleware = session({
-    secret: "lorem secretly",
+    secret: "auth-user-session",
     resave: true,
     saveUninitialized: false,
     cookie: { maxAge: 24 * 60 * 60 * 1000 },

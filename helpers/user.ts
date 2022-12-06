@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 
 import User from "../models/User";
 import Logging from "./customLog";
+import { AppError } from "./appError";
 
 interface UserCredentials {
     email: undefined;
@@ -51,11 +52,9 @@ const validatePassword = async (
     );
 
     if (!comparePwd) {
-        return res.json({
-            success: false,
-            message:
-                "Email or password is not correct. Please check and try again",
-        });
+        let errors =
+            "Email or password is not correct. Please check and try again";
+        return next(new AppError("Incorrect credentials", 422, errors));
     }
 
     // return next();
