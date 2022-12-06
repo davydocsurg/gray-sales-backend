@@ -1,20 +1,26 @@
 import { NextFunction, Request, Response } from "express";
 import { Logging } from "../helpers";
+import { Stock } from "../models";
 import User from "../models/User";
 
 class UserController {
     constructor() {
         this.getAuthUser = this.getAuthUser.bind(this);
+        this.findUserById = this.findUserById.bind(this);
     }
 
     async getAuthUser(req: Request, res: Response, next: NextFunction) {
         try {
-            const user = await User.find();
+            const user = req.user;
+            const authUserStocks = await Stock.find({
+                user: req.user,
+            });
 
             return res.json({
                 success: true,
                 data: {
                     user,
+                    authUserStocks,
                 },
             });
         } catch (error) {
@@ -31,7 +37,6 @@ class UserController {
     async findUserById(req: Request, res: Response, next: NextFunction) {
         try {
             const id = req.params.id;
-            console.log(id);
 
             const user = await User.findById(id);
 

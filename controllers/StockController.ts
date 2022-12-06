@@ -33,6 +33,7 @@ class StockController {
                 results: 1,
                 data: {
                     stocks,
+                    stocksCount,
                 },
             });
         } catch (error: unknown) {
