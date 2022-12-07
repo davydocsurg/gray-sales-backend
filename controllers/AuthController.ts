@@ -60,7 +60,6 @@ class AuthController {
             });
 
             await user.save({ validateBeforeSave: false });
-            Logging.info("hello");
 
             return res.status(200).json({
                 success: true,

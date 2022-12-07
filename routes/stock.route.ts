@@ -1,6 +1,7 @@
 import express from "express";
+import multer from "multer";
 import { StockController } from "../controllers";
-import { catchAsync } from "../helpers";
+import { catchAsync, stockImageStore, fileValidation } from "../helpers";
 import { isAuthenticated } from "../middlewares";
 import { ValidateCreateStockRequest } from "../middlewares/validators";
 
@@ -11,6 +12,10 @@ stockRoutes.get("/fetch", catchAsync(StockController.fetchStocks));
 stockRoutes.post(
     "/create",
     isAuthenticated,
+    multer({
+        storage: stockImageStore,
+        fileFilter: fileValidation,
+    }).single("images"),
     catchAsync(StockController.createStock)
 );
 

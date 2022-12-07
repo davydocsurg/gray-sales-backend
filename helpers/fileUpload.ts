@@ -3,10 +3,21 @@ import multer from "multer";
 import cloudinary from "cloudinary";
 import Logging from "./customLog";
 
-export const fileStorage = multer.diskStorage({
+export const stockImageStore = multer.diskStorage({
     destination: (req: Request, file: any, cb: Function) => {
         // Logging.info(file);
         cb(null, "public/stocks/images");
+    },
+
+    filename: (req: Request, file: any, cb: Function) => {
+        cb(null, new Date().toISOString() + "-" + file.originalname);
+    },
+});
+
+export const profileImageStore = multer.diskStorage({
+    destination: (req: Request, file: any, cb: Function) => {
+        // Logging.info(file);
+        cb(null, "public/users");
     },
 
     filename: (req: Request, file: any, cb: Function) => {
