@@ -23,6 +23,10 @@ stockRoutes.get("/:stockId", catchAsync(StockController.fetchStock));
 stockRoutes.put(
     "/:stockId/update",
     isAuthenticated,
+    multer({
+        storage: stockImageStore,
+        fileFilter: fileValidation,
+    }).single("images"),
     catchAsync(StockController.updateStock)
 );
 stockRoutes.delete(

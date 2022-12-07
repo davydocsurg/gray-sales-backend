@@ -72,7 +72,7 @@ class UserController {
             const profilePhoto = req.file;
 
             const user = await User.findById(id);
-            // return Logging.info(profilePhoto);
+
             const profileUpdates = {
                 name: name,
                 email: email,

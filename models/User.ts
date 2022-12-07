@@ -96,7 +96,7 @@ const UserSchema: Schema = new mongoose.Schema(
 );
 
 UserSchema.pre("save", async function (next) {
-    Logging.info(this.id);
+    // Logging.info(this.id);
     this.slug = slugify(this.name + this.id, { lower: true });
     if (this.isModified("password")) {
         this.password = await bcrypt.hash(this.password, 12);

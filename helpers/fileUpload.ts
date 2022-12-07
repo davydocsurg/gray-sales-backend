@@ -19,7 +19,6 @@ export const stockImageStore = multer.diskStorage({
 
 export const profileImageStore = multer.diskStorage({
     destination: (req: Request, file: any, cb: Function) => {
-        Logging.info(file);
         cb(null, "public/users");
     },
 
@@ -36,7 +35,10 @@ export const fileValidation = (req: Request, file: any, cb: Function) => {
     }
 };
 
-export const deleteOldPhoto = async (oldPhoto: any, defaultPhoto: string) => {
+export const deleteOldPhoto = async (
+    oldPhoto: string,
+    defaultPhoto: string
+) => {
     if (oldPhoto == defaultPhoto) {
         return false;
     } else {

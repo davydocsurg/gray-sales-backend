@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
-// import cloudinary from "cloudinary";
+import fs from "fs";
 
 // locals
 import { deleteOldPhoto, Logging, uploadImage } from "../helpers";
@@ -116,7 +116,7 @@ class StockController {
         const title = req.body.title;
         const description = req.body.description;
         const price = req.body.price;
-        const images = req.body.images;
+        const images = req.file;
         const categoryId = req.body.categoryId;
 
         const errors = validationResult(req);
@@ -131,7 +131,7 @@ class StockController {
                 title: title,
                 description: description,
                 price: price,
-                images: images?.path,
+                images: images,
                 categoryId: categoryId,
             };
 
@@ -142,9 +142,10 @@ class StockController {
                 updatedData
             );
 
-            const oldPhoto = "stocks/images/default.png";
-            Logging.info(stock?.images[0].path);
-            await deleteOldPhoto(stock?.images[0].path, oldPhoto);
+            const defaultPhoto = "stocks/images/default.png";
+            const oldPhoto = stock?.images[0].path;
+
+            await deleteOldPhoto(oldPhoto, defaultPhoto);
 
             return res.status(200).json({
                 success: true,

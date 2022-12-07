@@ -45,6 +45,10 @@ const StockSchema: Schema = new mongoose.Schema(
     }
 );
 
+// StockSchema.pre('save', async function (next) {
+
+// })
+
 const Stock = mongoose.model("Stock", StockSchema);
 
 export default Stock;
