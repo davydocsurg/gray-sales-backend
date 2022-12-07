@@ -5,6 +5,7 @@ import {
     fileValidation,
     uploadImage,
     profileImageStore,
+    deleteOldPhoto,
 } from "./fileUpload";
 import { checkUser } from "./user";
 import { AppError } from "./appError";
@@ -14,6 +15,7 @@ export {
     catchAsync,
     stockImageStore,
     profileImageStore,
+    deleteOldPhoto,
     fileValidation,
     checkUser,
     uploadImage,

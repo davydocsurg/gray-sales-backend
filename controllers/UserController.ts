@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { AppError, Logging } from "../helpers";
+
+// locals
+import { AppError, deleteOldPhoto, Logging } from "../helpers";
 import { Stock } from "../models";
 import User from "../models/User";
 
@@ -66,13 +68,15 @@ class UserController {
         try {
             const id = req.params.id;
 
-            const { name, email, profilePhoto } = req.body;
+            const { name, email } = req.body;
+            const profilePhoto = req.file;
 
             const user = await User.findById(id);
+            // return Logging.info(profilePhoto);
             const profileUpdates = {
                 name: name,
                 email: email,
-                profilePhoto: profilePhoto,
+                photo: profilePhoto?.path,
             };
 
             if (!user) {
@@ -83,8 +87,10 @@ class UserController {
                 id,
                 profileUpdates
             );
-
             await user.save({ validateBeforeSave: false });
+
+            const oldPhoto = "users/default.png";
+            await deleteOldPhoto(user, oldPhoto);
 
             return res.json({
                 success: true,

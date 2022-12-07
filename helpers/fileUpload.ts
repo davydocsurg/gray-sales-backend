@@ -1,5 +1,8 @@
 import { Request } from "express";
 import multer from "multer";
+import fs from "fs";
+
+// locals
 import cloudinary from "cloudinary";
 import Logging from "./customLog";
 
@@ -16,7 +19,7 @@ export const stockImageStore = multer.diskStorage({
 
 export const profileImageStore = multer.diskStorage({
     destination: (req: Request, file: any, cb: Function) => {
-        // Logging.info(file);
+        Logging.info(file);
         cb(null, "public/users");
     },
 
@@ -30,6 +33,14 @@ export const fileValidation = (req: Request, file: any, cb: Function) => {
         cb(null, true);
     } else {
         cb(null, false);
+    }
+};
+
+export const deleteOldPhoto = async (resource: any, oldPhoto: string) => {
+    if (resource?.photo == oldPhoto) {
+        return false;
+    } else {
+        return fs.unlinkSync(resource?.photo);
     }
 };
 
