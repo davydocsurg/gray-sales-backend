@@ -89,8 +89,9 @@ class UserController {
             );
             await user.save({ validateBeforeSave: false });
 
-            const oldPhoto = "users/default.png";
-            await deleteOldPhoto(user, oldPhoto);
+            const defaultPhoto = "users/default.png";
+            const oldPhoto = user?.photo;
+            await deleteOldPhoto(oldPhoto, defaultPhoto);
 
             return res.json({
                 success: true,

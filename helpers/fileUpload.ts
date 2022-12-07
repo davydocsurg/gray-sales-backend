@@ -36,11 +36,11 @@ export const fileValidation = (req: Request, file: any, cb: Function) => {
     }
 };
 
-export const deleteOldPhoto = async (resource: any, oldPhoto: string) => {
-    if (resource?.photo == oldPhoto) {
+export const deleteOldPhoto = async (oldPhoto: any, defaultPhoto: string) => {
+    if (oldPhoto == defaultPhoto) {
         return false;
     } else {
-        return fs.unlinkSync(resource?.photo);
+        return fs.unlinkSync(oldPhoto);
     }
 };
 

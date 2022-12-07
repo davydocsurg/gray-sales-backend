@@ -3,7 +3,7 @@ import { validationResult } from "express-validator";
 // import cloudinary from "cloudinary";
 
 // locals
-import { Logging, uploadImage } from "../helpers";
+import { deleteOldPhoto, Logging, uploadImage } from "../helpers";
 import { Stock } from "../models";
 
 class StockController {
@@ -131,17 +131,26 @@ class StockController {
                 title: title,
                 description: description,
                 price: price,
-                images: images,
+                images: images?.path,
                 categoryId: categoryId,
             };
 
-            const stock = await Stock.findByIdAndUpdate(stockId, updatedData);
+            const stock = await Stock.findById(stockId);
+
+            const updatedStock = await Stock.findByIdAndUpdate(
+                stockId,
+                updatedData
+            );
+
+            const oldPhoto = "stocks/images/default.png";
+            Logging.info(stock?.images[0].path);
+            await deleteOldPhoto(stock?.images[0].path, oldPhoto);
 
             return res.status(200).json({
                 success: true,
                 results: 1,
                 data: {
-                    stock,
+                    updatedStock,
                 },
             });
         } catch (error) {
