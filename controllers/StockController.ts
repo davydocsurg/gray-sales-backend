@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
 import fs from "fs";
+import { DEFAULT_STOCK_PHOTO } from "../commons/constants";
 
 // locals
 import { deleteOldPhoto, Logging, uploadImage } from "../helpers";
@@ -43,6 +44,22 @@ class StockController {
                     error,
                 },
             });
+        }
+    }
+
+    async fetchUserStocks(req: Request, res: Response, next: NextFunction) {
+        try {
+            const userId = req.params.userId;
+            const userStocksCount = await Stock.find({
+                user: userId,
+            }).countDocuments();
+
+            return res.json({
+                success: true,
+                data: { userStocksCount },
+            });
+        } catch (error: unknown) {
+            console.error(error);
         }
     }
 
@@ -142,10 +159,9 @@ class StockController {
                 updatedData
             );
 
-            const defaultPhoto = "stocks/images/default.png";
             const oldPhoto = stock?.images[0].path;
 
-            await deleteOldPhoto(oldPhoto, defaultPhoto);
+            await deleteOldPhoto(oldPhoto, DEFAULT_STOCK_PHOTO);
 
             return res.status(200).json({
                 success: true,
@@ -168,15 +184,16 @@ class StockController {
     async deleteStock(req: Request, res: Response, next: NextFunction) {
         try {
             const stockId = req.params.stockId;
-            const stock = await Stock.findByIdAndDelete(stockId);
+            const prevStock = await Stock.findById(stockId);
+
+            const photo = prevStock?.images[0].path;
+            await deleteOldPhoto(photo, DEFAULT_STOCK_PHOTO);
+            await Stock.findByIdAndDelete(stockId);
 
             return res.status(200).json({
                 success: true,
                 results: 1,
                 message: "Stock deleted successfully!",
-                data: {
-                    stock,
-                },
             });
         } catch (err: unknown) {
             Logging.error(err);

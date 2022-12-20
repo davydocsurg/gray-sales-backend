@@ -19,6 +19,7 @@ stockRoutes.post(
     catchAsync(StockController.createStock)
 );
 
+stockRoutes.get("/user/:userId", catchAsync(StockController.fetchUserStocks));
 stockRoutes.get("/:stockId", catchAsync(StockController.fetchStock));
 stockRoutes.put(
     "/:stockId/update",

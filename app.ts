@@ -5,7 +5,7 @@ import multer from "multer";
 import { errorHandler, sessionMiddleware } from "./middlewares";
 import { categoryRoutes, stockRoutes, userRoutes } from "./routes";
 import path from "path";
-import { fileStorage, fileValidation } from "./helpers";
+import { fileValidation } from "./helpers";
 import authRoutes from "./routes/auth.route";
 
 const app: Express = express();

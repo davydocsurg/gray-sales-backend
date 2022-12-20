@@ -19,7 +19,7 @@ userRoutes.get(
 );
 
 userRoutes.put(
-    "/auth-user/:id/update-profile",
+    "/auth-user/update-profile/:id",
     isAuthenticated,
     multer({
         storage: profileImageStore,
