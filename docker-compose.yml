@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  backend:
+    image: graysales-backend
+    volumes:
+      - ./:/srv
+    env_file:
+      - /.env
+    ports:
+      - '8080:8080'
+    networks:
+        - graysales
+    depends_on:
+      - mongo
+    command: [ "npm" , "run dev"]
+
+  mongo:
+      image: mongo
+      ports:
+        - "27001:27001"
+      networks:
+        - graysales
+      volumes:
+        - mongodb:/data/db
+        - mongodb_config:/data/configdb
+
+volumes:
+  mongodb:
+    driver: local
+  mongodb_config:
+    driver: local
+
+networks:
+  graysales:
+    driver: bridge
