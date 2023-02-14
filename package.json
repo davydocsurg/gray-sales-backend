@@ -5,7 +5,8 @@
     "main": "index.ts",
     "scripts": {
         "dev": "ts-node-dev --respawn --transpile-only index.ts",
-        "test": "mocha --recursive --timeout 10000 --exit build/test"
+        "test": "mocha --recursive --timeout 10000 --exit build/test",
+        "build": "tsc"
     },
     "repository": {
         "type": "git",
