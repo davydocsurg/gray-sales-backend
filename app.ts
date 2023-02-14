@@ -1,12 +1,11 @@
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
-import multer from "multer";
 
-import { errorHandler, sessionMiddleware } from "./middlewares";
-import { categoryRoutes, stockRoutes, userRoutes } from "./routes";
+// local imports
+import { errorHandler, sessionMiddleware } from "./src/middlewares";
+import { categoryRoutes, stockRoutes, userRoutes } from "./src/routes";
 import path from "path";
-import { fileValidation } from "./helpers";
-import authRoutes from "./routes/auth.route";
+import authRoutes from "./src/routes/auth.route";
 
 const app: Express = express();
 const allowlist = ["http://localhost:3000", process.env.FRONT_END_URL];
