@@ -2,23 +2,37 @@ version: '3'
 
 services:
   graysales:
-    container_name: graysales
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        - NODE_ENV=development
-    image: graysales-app
+    image: graysales-backend
+    volumes:
+      - .: /usr/src/app #/Users/pc/graysales-backend
+    env_file: .env
     ports:
       - "8080:8080"
-    depends_on:
-      - mongodb
-    command:  "npm run dev"
-    volumes:
-      - .: /home/node/app #/Users/pc/graysales-backend
-      - /home/node/app # /Users/pc/graysales-backend/node_modules
     networks:
       - graysales-network
+    depends_on:
+      - mongo
+    command:  "npm run dev"
+
+    mongo:
+      image: mongo
+      ports:
+        - "27001:27001"
+      networks:
+        - graysales-network
+      volumes:
+        - mongodb:/data/db
+        - mongodb_config:/data/configdb
+
+volumes:
+  mongodb:
+    driver: local
+  mongodb_config:
+    driver: local
+
+networks:
+  graysales-network:
+    driver: bridge
 
 # services:
 #   src:
