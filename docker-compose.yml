@@ -1,10 +1,14 @@
-version: '3'
+version: '3.8'
 
 services:
   graysales:
     image: graysales-backend
     volumes:
-      - .: /usr/src/app #/Users/pc/graysales-backend
+      - type: volume
+        source: graysales-data
+        target: /app/data
+
+      # - .: /usr/src/app #/Users/pc/graysales-backend
     env_file: .env
     ports:
       - "8080:8080"

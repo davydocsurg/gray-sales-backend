@@ -1,17 +1,22 @@
 FROM node:18-slim as builder
 
-COPY package*.json ./
+COPY package*.json /usr/package*.json
 COPY . .
 
 # Create app directory
+
+WORKDIR /usr/src/app
+# Install app dependencies
+RUN npm install --frozen-lockfile
+# ARG NODE_ENV
+# RUN if ["$NODE_ENV"="development"]; then npm install; else npm install --only=production; fi
+# COPY . .
+
 WORKDIR /usr/src/app
 RUN npm run build
 
-# Install app dependencies
-RUN npm run install
-# ARG NODE_ENV
-# RUN if ["$NODE_ENV"="development"]; then npm install; else npm install --only=production; fi
-COPY . .
+RUN npm install --frozen-lockfile --production --ignore-scripts
+
 
 # Build app
 FROM node:18-slim
