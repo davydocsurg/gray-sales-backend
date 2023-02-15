@@ -1,13 +1,13 @@
-import { NextFunction, Request, Response } from "express";
-import jwt, { JsonWebTokenError } from "jsonwebtoken";
-import { promisify } from "util";
+import { NextFunction, Response } from "express";
+import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../commons/constants";
 import { AppError, catchAsync, Logging } from "../helpers";
 import { User } from "../models";
+import { AuthRequest } from "../types";
 
 const jwt_key: string = JWT_SECRET;
 const isAuthenticated = catchAsync(
-    async (req: Request, res: Response, next: NextFunction) => {
+    async (req: AuthRequest, res: Response, next: NextFunction) => {
         // const logInSession: boolean = await req?.session.isLoggedIn;
 
         // if (!logInSession) {
