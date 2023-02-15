@@ -101,5 +101,5 @@
     "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
   },
   "include": ["./src/**/*"],                                  /* Specify include patterns for files to be included in compilation. */
-  "exclude": ["node_modules", "build"]                     /* Specify exclude patterns for files to be excluded from compilation. */
+  "exclude": ["./node_modules", "build"]                     /* Specify exclude patterns for files to be excluded from compilation. */
 }

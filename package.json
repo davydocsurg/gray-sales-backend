@@ -7,7 +7,7 @@
         "start": "ts-node-dev --respawn --transpile-only index.ts",
         "dev": "ts-node-dev --respawn --transpile-only index.ts",
         "test": "mocha --recursive --timeout 10000 --exit build/test",
-        "build": "tsc @davydocsurg/gray-sales-backend build"
+        "build": "tsc -p . && cp -r src/public build/public && cp -r src/views build/views && cp -r src/.env build/.env"
     },
     "repository": {
         "type": "git",
