@@ -7,8 +7,8 @@ process.on("uncaughtException", (err) => {
 });
 
 import app from "./app";
-import { mongoDBConnection } from "./src/config";
-import { Logging } from "./src/helpers";
+import { mongoDBConnection } from "./config";
+import { Logging } from "./helpers";
 
 mongoDBConnection();
 if (!process.env.APP_PORT) {

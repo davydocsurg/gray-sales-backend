@@ -15,8 +15,10 @@ services:
       - mongodb
     command:  "npm run dev"
     volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+      - .: /home/node/app #/Users/pc/graysales-backend
+      - /home/node/app # /Users/pc/graysales-backend/node_modules
+    networks:
+      - graysales-network
 
 # services:
 #   src:

@@ -2,10 +2,10 @@ import express, { Express, Request, Response } from "express";
 import cors from "cors";
 
 // local imports
-import { errorHandler, sessionMiddleware } from "./src/middlewares";
-import { categoryRoutes, stockRoutes, userRoutes } from "./src/routes";
+import { errorHandler, sessionMiddleware } from "./middlewares";
+import { categoryRoutes, stockRoutes, userRoutes } from "./routes";
 import path from "path";
-import authRoutes from "./src/routes/auth.route";
+import authRoutes from "./routes/auth.route";
 
 const app: Express = express();
 const allowlist = ["http://localhost:3000", process.env.FRONT_END_URL];

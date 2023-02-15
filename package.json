@@ -4,9 +4,10 @@
     "description": "GraySales Backend",
     "main": "index.ts",
     "scripts": {
+        "start": "ts-node-dev --respawn --transpile-only index.ts",
         "dev": "ts-node-dev --respawn --transpile-only index.ts",
         "test": "mocha --recursive --timeout 10000 --exit build/test",
-        "build": "tsc"
+        "build": "tsc @davydocsurg/gray-sales-backend build"
     },
     "repository": {
         "type": "git",
