@@ -1,9 +1,9 @@
 import multer from "multer";
-import { fileStorage, fileValidation } from "../helpers";
+import { fileValidation } from "../helpers";
 
 export const stockImageUpload = () => {
     const uploadConfig = multer({
-        storage: fileStorage,
+        // storage:,
         fileFilter: fileValidation,
     }).single("images");
 
