@@ -88,6 +88,25 @@ const UserSchema: Schema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "Stock",
         },
+        cart: {
+            items: [
+                {
+                    stock: {
+                        type: Object,
+                        required: true,
+                    },
+                    stockId: {
+                        type: Schema.Types.ObjectId,
+                        ref: "User",
+                        required: true,
+                    },
+                    quantity: {
+                        type: Number,
+                        required: true,
+                    },
+                },
+            ],
+        },
     },
     {
         timestamps: true,
@@ -143,6 +162,31 @@ UserSchema.methods.createPasswordResetToken = function (
         .update(resetToken)
         .digest("hex");
     return resetToken;
+};
+
+UserSchema.methods.addToCart = function (stock: any) {
+    const cartStockIndex = this.cart.items.findIndex((cp: any) => {
+        return cp.stockId.toString() === stock._id.toString();
+    });
+    let newQuantity = 1;
+    const updatedCartItems = [...this.cart.items];
+
+    if (cartStockIndex >= 0) {
+        newQuantity = this.cart.items[cartStockIndex].quantity + 1;
+        updatedCartItems[cartStockIndex].quantity = newQuantity;
+    } else {
+        updatedCartItems.push({
+            stockId: stock._id,
+            stock: stock,
+            quantity: newQuantity,
+        });
+    }
+
+    const updatedCart = {
+        items: updatedCartItems,
+    };
+    this.cart = updatedCart;
+    return this.save();
 };
 
 const User = mongoose.model("User", UserSchema);
