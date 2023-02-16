@@ -2,10 +2,10 @@
     "name": "gray-sales-backend",
     "version": "1.0.0",
     "description": "GraySales Backend",
-    "main": "index.ts",
+    "main": "src/index.ts",
     "scripts": {
-        "start": "ts-node-dev --respawn --transpile-only index.ts",
-        "dev": "ts-node-dev --respawn --transpile-only index.ts",
+        "start": "ts-node-dev --respawn --transpile-only src/index.ts",
+        "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
         "test": "mocha --recursive --timeout 10000 --exit build/test",
         "build": "tsc -p . && cp -r src/public build/public"
     },
