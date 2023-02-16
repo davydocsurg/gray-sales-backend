@@ -2,8 +2,7 @@ import { NextFunction, Response } from "express";
 import bcrypt from "bcryptjs";
 
 import { User } from "../models";
-import Logging from "./customLog";
-import { AppError } from "./appError";
+import { AppError } from ".";
 
 interface UserCredentials {
     email: undefined;

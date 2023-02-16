@@ -8,7 +8,7 @@ import {
     deleteOldPhoto,
 } from "./fileUpload";
 import { checkUser } from "./user";
-import { AppError } from "./appError";
+import { AppError } from "./AppError";
 
 export {
     Logging,

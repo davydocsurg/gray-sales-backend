@@ -6,6 +6,7 @@ import { DEFAULT_STOCK_PHOTO } from "../commons/constants";
 // locals
 import { deleteOldPhoto, Logging, uploadImage } from "../helpers";
 import { Stock } from "../models";
+import { AuthRequest } from "../types";
 
 class StockController {
     constructor() {
@@ -63,7 +64,7 @@ class StockController {
         }
     }
 
-    async createStock(req: Request, res: Response, next: NextFunction) {
+    async createStock(req: AuthRequest, res: Response, next: NextFunction) {
         try {
             const title = req.body.title;
             const description = req.body.description;

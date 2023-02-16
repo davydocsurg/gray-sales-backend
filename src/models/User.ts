@@ -3,7 +3,6 @@ import validator from "validator";
 import slugify from "slugify";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import { Logging } from "../helpers";
 
 const UserSchema: Schema = new mongoose.Schema(
     {

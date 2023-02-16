@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from "express";
 import { AppError, deleteOldPhoto, Logging } from "../helpers";
 import { Stock } from "../models";
 import User from "../models/User";
+import { AuthRequest } from "../types";
 
 class UserController {
     constructor() {
@@ -12,7 +13,7 @@ class UserController {
         this.updateProfile = this.updateProfile.bind(this);
     }
 
-    async getAuthUser(req: Request, res: Response, next: NextFunction) {
+    async getAuthUser(req: AuthRequest, res: Response, next: NextFunction) {
         try {
             const user = req.user;
             const authUserStocks = await Stock.find({
@@ -37,7 +38,7 @@ class UserController {
         }
     }
 
-    async findUserById(req: Request, res: Response, next: NextFunction) {
+    async findUserById(req: AuthRequest, res: Response, next: NextFunction) {
         try {
             const id = req.params.id;
 

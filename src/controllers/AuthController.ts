@@ -6,6 +6,7 @@ import { AppError, checkUser, Logging } from "../helpers";
 import User from "../models/User";
 import { verifyUserLoginDetails } from "../helpers/user";
 import { cookieOptions, JWT_SECRET } from "../commons/constants";
+import { AuthRequest } from "../types";
 
 const signToken = (id: string, type: string) => {
     const jwt_key: string = JWT_SECRET;
@@ -75,7 +76,7 @@ class AuthController {
         }
     }
 
-    async login(req: Request, res: Response, next: NextFunction) {
+    async login(req: AuthRequest, res: Response, next: NextFunction) {
         const { email, password } = req.body;
 
         // const user = await verifyUserLoginDetails(email, password, res, next);
