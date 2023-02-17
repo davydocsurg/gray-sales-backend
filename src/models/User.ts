@@ -198,6 +198,11 @@ UserSchema.methods.removeFromCart = function (stockId: string) {
     return this.save();
 };
 
+UserSchema.methods.clearCart = function () {
+    this.cart = { items: [] };
+    return this.save();
+};
+
 const User = mongoose.model("User", UserSchema);
 
 export default User;
