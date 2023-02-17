@@ -48,7 +48,7 @@ app.use(
 
 app.use("/api", authRoutes);
 app.use("/api/category", categoryRoutes);
-app.use("/api/stock", stockRoutes);
+app.use("/api/stocks", stockRoutes);
 app.use("/api", userRoutes);
 
 app.use(errorHandler);

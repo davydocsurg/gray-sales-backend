@@ -5,13 +5,17 @@ import { DEFAULT_STOCK_PHOTO } from "../../commons/constants";
 
 // locals
 import { deleteOldPhoto, Logging, uploadImage } from "../../helpers";
-import { Stock } from "../../models";
+import { Category, Stock } from "../../models";
 import { AuthRequest } from "../../types";
 
 class StockController {
     constructor() {
         this.fetchStocks = this.fetchStocks.bind(this);
         this.createStock = this.createStock.bind(this);
+        this.fetchStock = this.fetchStock.bind(this);
+        this.updateStock = this.updateStock.bind(this);
+        this.deleteStock = this.deleteStock.bind(this);
+        this.fetchUserStocks = this.fetchUserStocks.bind(this);
     }
 
     async fetchStocks(req: Request, res: Response, next: NextFunction) {
@@ -205,6 +209,38 @@ class StockController {
                 },
             });
         }
+    }
+
+    async fetchStocksByCategory(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
+        try {
+            const categoryId = req.params.categoryId;
+
+            // find all stocks by category
+            const categoryStocks = await Stock.find({
+                categoryId,
+            });
+            Logging.info(categoryStocks);
+
+            return res.status(200).json({
+                success: true,
+                results: 1,
+                data: {
+                    categoryStocks,
+                },
+            });
+        } catch (error: unknown) {
+            console.error(error);
+        }
+    }
+
+    async fetchStocksByUser(req: Request, res: Response, next: NextFunction) {
+        try {
+            // const userStocks;
+        } catch (error: unknown) {}
     }
 }
 
