@@ -3,6 +3,7 @@ import validator from "validator";
 import slugify from "slugify";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import { Item } from "../types";
 
 const UserSchema: Schema = new mongoose.Schema(
     {
@@ -186,6 +187,14 @@ UserSchema.methods.addToCart = function (stock: any) {
         items: updatedCartItems,
     };
     this.cart = updatedCart;
+    return this.save();
+};
+
+UserSchema.methods.removeFromCart = function (stockId: string) {
+    const updatedCartItems = this.cart.items.filter((item: Item) => {
+        return item.stockId.toString() !== stockId.toString();
+    });
+    this.cart.items = updatedCartItems;
     return this.save();
 };
 

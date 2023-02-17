@@ -1,3 +1,4 @@
 import { AuthRequest } from "./AuthRequest";
+import { Item } from "./Cart";
 
-export type { AuthRequest };
+export type { AuthRequest, Item };
