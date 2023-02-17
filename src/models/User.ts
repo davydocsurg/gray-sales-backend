@@ -118,7 +118,8 @@ UserSchema.pre("save", async function (next) {
     // Logging.info(this.id);
     this.slug = slugify(this.name + this.id, { lower: true });
     if (this.isModified("password")) {
-        this.password = await bcrypt.hash(this.password, 12);
+        const hashedPassword = await bcrypt.hash(this.password, 12);
+        this.password = hashedPassword;
         this.passwordConfirmtion = undefined;
     }
     next();

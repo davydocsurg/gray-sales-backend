@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
 import fs from "fs";
-import { DEFAULT_STOCK_PHOTO } from "../commons/constants";
+import { DEFAULT_STOCK_PHOTO } from "../../commons/constants";
 
 // locals
-import { deleteOldPhoto, Logging, uploadImage } from "../helpers";
-import { Stock } from "../models";
-import { AuthRequest } from "../types";
+import { deleteOldPhoto, Logging, uploadImage } from "../../helpers";
+import { Stock } from "../../models";
+import { AuthRequest } from "../../types";
 
 class StockController {
     constructor() {
