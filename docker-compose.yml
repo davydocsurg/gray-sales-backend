@@ -1,74 +1,38 @@
-version: '3.8'
+version: '3'
 
 services:
   graysales:
     image: graysales-backend
     volumes:
-      - type: volume
-        source: graysales-data
-        target: /app/data
+      - ./:/graysales
 
-      # - .: /usr/src/app #/Users/pc/graysales-backend
     env_file: .env
     ports:
       - "8080:8080"
     networks:
       - graysales-network
     depends_on:
-      - mongo
+      - graysales-mongo
     command:  "npm run dev"
 
-    mongo:
-      image: mongo
+    graysales-mongo:
+      image: mongo:5.0
+      container-name: graysales-mongo
       ports:
         - "27001:27001"
       networks:
         - graysales-network
       volumes:
-        - mongodb:/data/db
-        - mongodb_config:/data/configdb
+        - graysales-mongo:/data/db
+        - graysales-mongo_config:/data/configdb
 
 volumes:
-  mongodb:
+  graysales-mongo:
     driver: local
-  mongodb_config:
+  graysales-mongo_config:
     driver: local
 
 networks:
   graysales-network:
     driver: bridge
 
-# services:
-#   src:
-#     image: graysales-app
-#     volumes:
-#       - ./:/src
-#     env_file:
-#       - .env
-#     ports:
-#       - '8080:8080'
-#     networks:
-#         - graysales
-#     depends_on:
-#       - mongo
-#     command: [ "npm" , "run dev"]
-
-#   mongo:
-#       image: mongo
-#       ports:
-#         - "27001:27001"
-#       networks:
-#         - graysales
-#       volumes:
-#         - mongodb:/data/db
-#         - mongodb_config:/data/configdb
-
-# volumes:
-#   mongodb:
-#     driver: local
-#   mongodb_config:
-#     driver: local
-
-# networks:
-#   graysales:
-#     driver: bridge
