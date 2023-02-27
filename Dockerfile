@@ -1,7 +1,7 @@
 FROM node:18-slim as builder
 
 COPY package*.json /graysales/
-COPY . .
+COPY . ./graysales
 
 # Create app directory
 WORKDIR /graysales

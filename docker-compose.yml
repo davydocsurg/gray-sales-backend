@@ -15,16 +15,16 @@ services:
       - graysales-mongo
     command:  "npm run dev"
 
-    graysales-mongo:
-      image: mongo:5.0
-      container-name: graysales-mongo
-      ports:
-        - "27001:27001"
-      networks:
-        - graysales-network
-      volumes:
-        - graysales-mongo:/data/db
-        - graysales-mongo_config:/data/configdb
+  graysales-mongo:
+    image: mongo:5.0
+    container_name: graysales-mongo
+    ports:
+      - "27001:27001"
+    networks:
+      - graysales-network
+    volumes:
+      - graysales-mongo:/data/db
+      - graysales-mongo_config:/data/configdb
 
 volumes:
   graysales-mongo:
