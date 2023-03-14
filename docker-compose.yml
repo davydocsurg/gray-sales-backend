@@ -19,7 +19,7 @@ services:
     image: mongo:5.0
     container_name: graysales-mongo
     ports:
-      - "27001:27001"
+      - "27017:27017"
     networks:
       - graysales-network
     volumes:
