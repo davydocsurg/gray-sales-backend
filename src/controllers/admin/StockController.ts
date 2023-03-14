@@ -76,6 +76,7 @@ class StockController {
             const images = req.file;
             const categoryId = req.body.categoryId;
 
+            // return Logging.error(req.file + "mnfknkak");
             const stock = await Stock.create({
                 title,
                 description,
