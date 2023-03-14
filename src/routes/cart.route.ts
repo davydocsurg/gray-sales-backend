@@ -11,4 +11,6 @@ cartRoute.post(
     catchAsync(CartController.addProdToCart)
 );
 
+cartRoute.get("/fetch", isAuthenticated, catchAsync(CartController.fetchCart));
+
 export default cartRoute;

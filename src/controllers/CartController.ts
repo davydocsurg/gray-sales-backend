@@ -30,16 +30,17 @@ class CartController {
     }
 
     async fetchCart(req: AuthRequest, res: Response, next: NextFunction) {
-        const cart = await req.user.cart.populate("cart.items");
+        const prodInCart = await req.user.populate("cart.items");
 
-        const products = cart.cart.items.map((i) => {
-            return {
-                ...i.productId._doc,
-                quantity: i.quantity,
-            };
+        const products = prodInCart.cart.items;
+
+        return res.json({
+            success: true,
+            message: "Cart fetched",
+            data: {
+                products,
+            },
         });
-
-        console.log(products);
     }
 }
 
