@@ -50,7 +50,7 @@ app.use("/api", authRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/stocks", stockRoutes);
 app.use("/api", userRoutes);
-app.use("api/cart", cartRoute);
+app.use("/api/cart", cartRoute);
 
 app.use(errorHandler);
 

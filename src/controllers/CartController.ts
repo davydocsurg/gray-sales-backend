@@ -3,10 +3,13 @@ import { Stock } from "../models";
 import { AuthRequest } from "../types";
 
 class CartController {
-    constructor() {}
+    constructor() {
+        this.addProdToCart = this.addProdToCart.bind(this);
+        this.fetchCart = this.fetchCart.bind(this);
+    }
 
     async addProdToCart(req: AuthRequest, res: Response, next: NextFunction) {
-        const prodId = req.body.productId.trim();
+        const prodId = req.params.productId.trim();
 
         const product = await Stock.findById(prodId);
         if (!product) {
@@ -15,6 +18,7 @@ class CartController {
                 message: "Product not found",
             });
         }
+        await req.user.addToCart(product);
 
         return res.json({
             success: true,
