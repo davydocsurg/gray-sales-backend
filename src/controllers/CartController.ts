@@ -1,71 +1,74 @@
 import { NextFunction, Request, Response } from "express";
+import { Logging } from "../helpers";
 import { Stock } from "../models";
 import { AuthRequest } from "../types";
 
 class CartController {
     constructor() {
-        this.addProdToCart = this.addProdToCart.bind(this);
+        this.addStockToCart = this.addStockToCart.bind(this);
         this.fetchCart = this.fetchCart.bind(this);
+        this.deleteStockFromCart = this.deleteStockFromCart.bind(this);
+        this.reduceStockQty = this.reduceStockQty.bind(this);
     }
 
-    async addProdToCart(req: AuthRequest, res: Response, next: NextFunction) {
-        const stockId = req.body.productId.trim();
+    async addStockToCart(req: AuthRequest, res: Response, next: NextFunction) {
+        const stockId = req.body.stockId.trim();
 
-        const product = await Stock.findById(stockId);
-        if (!product) {
+        const stock = await Stock.findById(stockId);
+        if (!stock) {
             return res.json({
                 success: false,
-                message: "Product not found",
+                message: "Stock not found",
             });
         }
-        await req.user.addToCart(product);
+        await req.user.addToCart(stock);
 
         return res.json({
             success: true,
-            message: "Product added to cart",
+            message: "Stock added to cart",
             data: {
-                product,
+                stock,
             },
         });
     }
 
     async fetchCart(req: AuthRequest, res: Response, next: NextFunction) {
-        const prodInCart = await req.user.populate("cart.items");
+        const stockInCart = await req.user.populate("cart.items");
 
-        const products = prodInCart.cart.items;
+        const stocks = stockInCart.cart.items;
 
         return res.json({
             success: true,
             message: "Cart fetched",
             data: {
-                products,
+                stocks,
             },
         });
     }
 
-    async deleteProdFromCart(
+    async deleteStockFromCart(
         req: AuthRequest,
         res: Response,
         next: NextFunction
     ) {
-        const stockId = req.body.productId.trim();
+        const stockId = req.body.stockId.trim();
 
         await req.user.removeFromCart(stockId);
 
         return res.json({
             success: true,
-            message: "Product removed from cart",
+            message: "Stock removed from cart",
         });
     }
 
-    async reduceProdQty(req: AuthRequest, res: Response, next: NextFunction) {
-        const stockId = req.body.productId.trim();
+    async reduceStockQty(req: AuthRequest, res: Response, next: NextFunction) {
+        const stockId = req.body.stockId.trim();
 
-        await req.user.reduceProdQty(stockId);
+        await req.user.reduceStockQty(stockId);
 
         return res.json({
             success: true,
-            message: "Product quantity reduced",
+            message: "Stock quantity reduced",
         });
     }
 }

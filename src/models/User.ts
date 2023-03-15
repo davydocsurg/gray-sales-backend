@@ -4,6 +4,7 @@ import slugify from "slugify";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { Item } from "../types";
+import { Logging } from "../helpers";
 
 const UserSchema: Schema = new mongoose.Schema(
     {
@@ -199,13 +200,14 @@ UserSchema.methods.removeFromCart = function (stockId: string) {
     return this.save();
 };
 
-UserSchema.methods.reduceProdQty = function (stockId: string) {
+UserSchema.methods.reduceStockQty = function (stockId: string) {
     const updatedCartItems = this.cart.items.map((item: Item) => {
         if (item.stockId.toString() === stockId.toString()) {
             if (item.quantity === 1) {
-                this.removeFromCart(stockId);
+                return this.removeFromCart(stockId);
+            } else {
+                return (item.quantity -= 1);
             }
-            item.quantity -= 1;
         }
         return item;
     });

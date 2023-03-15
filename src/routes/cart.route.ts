@@ -8,15 +8,21 @@ const cartRoute = express.Router();
 cartRoute.post(
     "/add",
     isAuthenticated,
-    catchAsync(CartController.addProdToCart)
+    catchAsync(CartController.addStockToCart)
 );
 
 cartRoute.get("/fetch", isAuthenticated, catchAsync(CartController.fetchCart));
 
+cartRoute.patch(
+    "/reduce-quantity",
+    isAuthenticated,
+    catchAsync(CartController.reduceStockQty)
+);
+
 cartRoute.delete(
     "/delete",
     isAuthenticated,
-    catchAsync(CartController.deleteProdFromCart)
+    catchAsync(CartController.deleteStockFromCart)
 );
 
 export default cartRoute;
