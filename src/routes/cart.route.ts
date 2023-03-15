@@ -6,11 +6,17 @@ import { isAuthenticated } from "../middlewares";
 const cartRoute = express.Router();
 
 cartRoute.post(
-    "/add/:productId",
+    "/add",
     isAuthenticated,
     catchAsync(CartController.addProdToCart)
 );
 
 cartRoute.get("/fetch", isAuthenticated, catchAsync(CartController.fetchCart));
+
+cartRoute.delete(
+    "/delete",
+    isAuthenticated,
+    catchAsync(CartController.deleteProdFromCart)
+);
 
 export default cartRoute;

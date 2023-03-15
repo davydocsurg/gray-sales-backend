@@ -199,6 +199,20 @@ UserSchema.methods.removeFromCart = function (stockId: string) {
     return this.save();
 };
 
+UserSchema.methods.reduceProdQty = function (stockId: string) {
+    const updatedCartItems = this.cart.items.map((item: Item) => {
+        if (item.stockId.toString() === stockId.toString()) {
+            if (item.quantity === 1) {
+                this.removeFromCart(stockId);
+            }
+            item.quantity -= 1;
+        }
+        return item;
+    });
+    this.cart.items = updatedCartItems;
+    return this.save();
+};
+
 UserSchema.methods.clearCart = function () {
     this.cart = { items: [] };
     return this.save();

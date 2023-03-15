@@ -9,9 +9,9 @@ class CartController {
     }
 
     async addProdToCart(req: AuthRequest, res: Response, next: NextFunction) {
-        const prodId = req.params.productId.trim();
+        const stockId = req.body.productId.trim();
 
-        const product = await Stock.findById(prodId);
+        const product = await Stock.findById(stockId);
         if (!product) {
             return res.json({
                 success: false,
@@ -40,6 +40,32 @@ class CartController {
             data: {
                 products,
             },
+        });
+    }
+
+    async deleteProdFromCart(
+        req: AuthRequest,
+        res: Response,
+        next: NextFunction
+    ) {
+        const stockId = req.body.productId.trim();
+
+        await req.user.removeFromCart(stockId);
+
+        return res.json({
+            success: true,
+            message: "Product removed from cart",
+        });
+    }
+
+    async reduceProdQty(req: AuthRequest, res: Response, next: NextFunction) {
+        const stockId = req.body.productId.trim();
+
+        await req.user.reduceProdQty(stockId);
+
+        return res.json({
+            success: true,
+            message: "Product quantity reduced",
         });
     }
 }
