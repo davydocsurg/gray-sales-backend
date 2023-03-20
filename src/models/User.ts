@@ -204,7 +204,7 @@ UserSchema.methods.reduceStockQty = function (stockId: string) {
     const updatedCartItems = this.cart.items.map((item: Item) => {
         if (item.stockId.toString() === stockId.toString()) {
             if (item.quantity === 1) {
-                return this.removeFromCart(stockId);
+                return item;
             } else {
                 return (item.quantity -= 1);
             }
