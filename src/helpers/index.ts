@@ -7,7 +7,7 @@ import {
     profileImageStore,
     deleteOldPhoto,
 } from "./fileUpload";
-import { checkUser } from "./user";
+import { checkUser, fetchUserStocks } from "./user";
 import { AppError } from "./AppError";
 
 export {
@@ -15,6 +15,7 @@ export {
     catchAsync,
     stockImageStore,
     profileImageStore,
+    fetchUserStocks,
     deleteOldPhoto,
     fileValidation,
     checkUser,

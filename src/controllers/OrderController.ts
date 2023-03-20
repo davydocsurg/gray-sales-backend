@@ -1,4 +1,5 @@
 import { NextFunction, Response } from "express";
+import { fetchUserStocks, Logging } from "../helpers";
 import { Order } from "../models";
 import type { AuthRequest, OrderType } from "../types";
 
@@ -64,6 +65,19 @@ class OrderController {
                 },
             });
         }
+    }
+
+    async calculateTotalPrice(
+        req: AuthRequest,
+        res: Response,
+        next: NextFunction
+    ) {
+        const stocks = await fetchUserStocks(req);
+        let total = 0;
+        await stocks.forEach((i: OrderType) => {
+            total += i.quantity + i.stock.price;
+        });
+        Logging.info(total);
     }
 }
 
