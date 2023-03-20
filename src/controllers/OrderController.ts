@@ -3,7 +3,10 @@ import { Order } from "../models";
 import type { AuthRequest, OrderType } from "../types";
 
 class OrderController {
-    constructor() {}
+    constructor() {
+        this.createOrder = this.createOrder.bind(this);
+        this.fetchOrders = this.fetchOrders.bind(this);
+    }
 
     async createOrder(req: AuthRequest, res: Response, next: NextFunction) {
         try {
@@ -33,6 +36,29 @@ class OrderController {
         } catch (error: any) {
             return res.json({
                 success: false,
+                errors: {
+                    error,
+                },
+            });
+        }
+    }
+
+    async fetchOrders(req: AuthRequest, res: Response, next: NextFunction) {
+        try {
+            const orders = await Order.find({
+                "user.userId": req.user._id,
+            });
+
+            return res.json({
+                status: true,
+                data: {
+                    orders,
+                },
+                message: "Orders fetched successfully",
+            });
+        } catch (error: any) {
+            return res.json({
+                status: false,
                 errors: {
                     error,
                 },
