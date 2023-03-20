@@ -58,6 +58,7 @@ class AuthController {
                 passwordConfirmation: passwordConfirmation,
                 type: "vendor",
                 verificationStatus: "unverfied",
+                cart: { items: [] },
             });
 
             await user.save({ validateBeforeSave: false });

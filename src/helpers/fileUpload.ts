@@ -8,7 +8,6 @@ import Logging from "./customLog";
 
 export const stockImageStore = multer.diskStorage({
     destination: (req: Request, file: any, cb: Function) => {
-        // Logging.info(file);
         cb(null, "public/stocks/images");
     },
 

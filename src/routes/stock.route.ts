@@ -36,4 +36,10 @@ stockRoutes.delete(
     catchAsync(StockController.deleteStock)
 );
 
+stockRoutes.get(
+    "/category/:categoryId",
+    isAuthenticated,
+    catchAsync(StockController.fetchStocksByCategory)
+);
+
 export default stockRoutes;

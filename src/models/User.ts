@@ -3,6 +3,8 @@ import validator from "validator";
 import slugify from "slugify";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import { Item } from "../types";
+import { Logging } from "../helpers";
 
 const UserSchema: Schema = new mongoose.Schema(
     {
@@ -88,6 +90,25 @@ const UserSchema: Schema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "Stock",
         },
+        cart: {
+            items: [
+                {
+                    stock: {
+                        type: Object,
+                        required: true,
+                    },
+                    stockId: {
+                        type: Schema.Types.ObjectId,
+                        ref: "User",
+                        required: true,
+                    },
+                    quantity: {
+                        type: Number,
+                        required: true,
+                    },
+                },
+            ],
+        },
     },
     {
         timestamps: true,
@@ -98,7 +119,8 @@ UserSchema.pre("save", async function (next) {
     // Logging.info(this.id);
     this.slug = slugify(this.name + this.id, { lower: true });
     if (this.isModified("password")) {
-        this.password = await bcrypt.hash(this.password, 12);
+        const hashedPassword = await bcrypt.hash(this.password, 12);
+        this.password = hashedPassword;
         this.passwordConfirmtion = undefined;
     }
     next();
@@ -143,6 +165,59 @@ UserSchema.methods.createPasswordResetToken = function (
         .update(resetToken)
         .digest("hex");
     return resetToken;
+};
+
+UserSchema.methods.addToCart = function (stock: any) {
+    const cartStockIndex = this.cart.items.findIndex((cp: any) => {
+        return cp.stockId.toString() === stock._id.toString();
+    });
+    let newQuantity = 1;
+    const updatedCartItems = [...this.cart.items];
+
+    if (cartStockIndex >= 0) {
+        newQuantity = this.cart.items[cartStockIndex].quantity + 1;
+        updatedCartItems[cartStockIndex].quantity = newQuantity;
+    } else {
+        updatedCartItems.push({
+            stockId: stock._id,
+            stock: stock,
+            quantity: newQuantity,
+        });
+    }
+
+    const updatedCart = {
+        items: updatedCartItems,
+    };
+    this.cart = updatedCart;
+    return this.save();
+};
+
+UserSchema.methods.removeFromCart = function (stockId: string) {
+    const updatedCartItems = this.cart.items.filter((item: Item) => {
+        return item.stockId.toString() !== stockId.toString();
+    });
+    this.cart.items = updatedCartItems;
+    return this.save();
+};
+
+UserSchema.methods.reduceStockQty = function (stockId: string) {
+    const updatedCartItems = this.cart.items.map((item: Item) => {
+        if (item.stockId.toString() === stockId.toString()) {
+            if (item.quantity === 1) {
+                return item;
+            } else {
+                return (item.quantity -= 1);
+            }
+        }
+        return item;
+    });
+    this.cart.items = updatedCartItems;
+    return this.save();
+};
+
+UserSchema.methods.clearCart = function () {
+    this.cart = { items: [] };
+    return this.save();
 };
 
 const User = mongoose.model("User", UserSchema);

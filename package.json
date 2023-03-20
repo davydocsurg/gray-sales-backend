@@ -7,7 +7,7 @@
         "start": "ts-node-dev --respawn --transpile-only src/index.ts",
         "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
         "test": "mocha --recursive --timeout 10000 --exit build/test",
-        "build": "tsc -p . && cp -r src/public build/public"
+        "build": "tsc -p . && cp -r public build/public"
     },
     "repository": {
         "type": "git",

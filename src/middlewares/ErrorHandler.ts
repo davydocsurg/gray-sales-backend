@@ -23,7 +23,7 @@ const handleValidationErrorDB = (err: any) => {
 };
 
 const sendErrorDev = (err: any, res: Response) => {
-    res.status(err.statusCode).json({
+    res.status(err.statusCode || 500).json({
         error: err,
         errors: err.errors,
         message: err.message,

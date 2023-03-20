@@ -3,7 +3,7 @@ import cors from "cors";
 
 // local imports
 import { errorHandler, sessionMiddleware } from "./middlewares";
-import { categoryRoutes, stockRoutes, userRoutes } from "./routes";
+import { cartRoute, categoryRoutes, stockRoutes, userRoutes } from "./routes";
 import path from "path";
 import authRoutes from "./routes/auth.route";
 
@@ -48,8 +48,9 @@ app.use(
 
 app.use("/api", authRoutes);
 app.use("/api/category", categoryRoutes);
-app.use("/api/stock", stockRoutes);
+app.use("/api/stocks", stockRoutes);
 app.use("/api", userRoutes);
+app.use("/api/cart", cartRoute);
 
 app.use(errorHandler);
 

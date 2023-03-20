@@ -1,5 +1,5 @@
 import express from "express";
-import CategoryController from "../controllers/CategoryController";
+import CategoryController from "../controllers/admin/CategoryController";
 import { catchAsync } from "../helpers";
 import { ValidateCreateCategoryRequest } from "../middlewares/validators";
 
