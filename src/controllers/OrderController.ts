@@ -1,5 +1,5 @@
 import { NextFunction, Response } from "express";
-import { fetchUserStocks, Logging } from "../helpers";
+import { fetchUserStocks, initializePayment, Logging } from "../helpers";
 import { Order } from "../models";
 import type { AuthRequest, OrderType } from "../types";
 
@@ -8,6 +8,7 @@ class OrderController {
         this.createOrder = this.createOrder.bind(this);
         this.fetchOrders = this.fetchOrders.bind(this);
         this.calculateTotalPrice = this.calculateTotalPrice.bind(this);
+        this.checkout = this.checkout.bind(this);
     }
 
     async createOrder(req: AuthRequest, res: Response, next: NextFunction) {
@@ -73,20 +74,20 @@ class OrderController {
         res: Response,
         next: NextFunction
     ) {
+        // fetch
         const stocks = await fetchUserStocks(req);
         let total = 0;
         await stocks.forEach((i: OrderType) => {
-            total += i.quantity + i.stock.price;
+            total += i.stock.price * i.quantity;
         });
-        // Logging.info(total.toFixed(2));
+        return total * 100;
+    }
 
-        return res.json({
-            success: true,
-            message: "Total price calculated",
-            data: {
-                total,
-            },
-        });
+    async checkout(req: AuthRequest, res: Response, next: NextFunction) {
+        const total = await this.calculateTotalPrice(req, res, next);
+
+        const payment = await initializePayment(req, res, total);
+        Logging.warn(payment);
     }
 }
 

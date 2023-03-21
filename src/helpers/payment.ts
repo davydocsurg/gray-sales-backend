@@ -5,19 +5,21 @@ import Logging from "./customLog";
 
 const paystack = new PayStack(process.env.PAYSTACK_SECRET_KEY);
 
-export const initializePayment = async (req: AuthRequest, res: Response) => {
+export const initializePayment = async (
+    req: AuthRequest,
+    res: Response,
+    amount: number
+) => {
     try {
-        const { amount, email } = req.body;
+        const email = req.user.email;
+
         const response = await paystack.transaction.initialize({
             amount,
             email,
         });
 
         Logging.success(response);
-        return res.json({
-            success: true,
-            message: "Payment initialized",
-        });
+        return response;
     } catch (error: any) {
         Logging.error(error);
     }

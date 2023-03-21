@@ -18,9 +18,9 @@ orderRoutes.post(
 );
 
 orderRoutes.get(
-    "/total-price",
+    "/checkout",
     isAuthenticated,
-    catchAsync(OrderController.calculateTotalPrice)
+    catchAsync(OrderController.checkout)
 );
 
 export default orderRoutes;
