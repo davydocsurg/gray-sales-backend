@@ -1,5 +1,10 @@
 import { NextFunction, Response } from "express";
-import { fetchUserStocks, initializePayment, Logging } from "../helpers";
+import {
+    fetchUserStocks,
+    initializePayment,
+    Logging,
+    verifyTransaction,
+} from "../helpers";
 import { Order } from "../models";
 import type { AuthRequest, OrderType } from "../types";
 
@@ -86,8 +91,9 @@ class OrderController {
     async checkout(req: AuthRequest, res: Response, next: NextFunction) {
         const total = await this.calculateTotalPrice(req, res, next);
 
-        const payment = await initializePayment(req, res, total);
-        Logging.warn(payment);
+        const response = await initializePayment(req, res, total);
+        const ress = await verifyTransaction(response.data.reference);
+        Logging.info(ress);
     }
 }
 

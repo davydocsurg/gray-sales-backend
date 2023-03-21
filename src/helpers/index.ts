@@ -9,7 +9,7 @@ import {
 } from "./fileUpload";
 import { checkUser, fetchUserStocks } from "./user";
 import { AppError } from "./AppError";
-import { initializePayment } from "./payment";
+import { initializePayment, verifyTransaction } from "./payment";
 
 export {
     Logging,
@@ -23,4 +23,5 @@ export {
     checkUser,
     uploadImage,
     initializePayment,
+    verifyTransaction,
 };
