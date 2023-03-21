@@ -17,4 +17,10 @@ orderRoutes.post(
     catchAsync(OrderController.createOrder)
 );
 
+orderRoutes.get(
+    "/total-price",
+    isAuthenticated,
+    catchAsync(OrderController.calculateTotalPrice)
+);
+
 export default orderRoutes;

@@ -70,7 +70,7 @@ const findUserByEmail = async (email: undefined) => {
 };
 
 export const fetchUserStocks = async (req: AuthRequest) => {
-    const user = await req.user.populate("cart.items.StockId");
+    const user = await req.user.populate("cart.items.stockId");
     const stocks = user.cart.items;
     return stocks;
 };

@@ -9,9 +9,11 @@ import {
 } from "./fileUpload";
 import { checkUser, fetchUserStocks } from "./user";
 import { AppError } from "./AppError";
+import { initializePayment } from "./payment";
 
 export {
     Logging,
+    AppError,
     catchAsync,
     stockImageStore,
     profileImageStore,
@@ -20,5 +22,5 @@ export {
     fileValidation,
     checkUser,
     uploadImage,
-    AppError,
+    initializePayment,
 };

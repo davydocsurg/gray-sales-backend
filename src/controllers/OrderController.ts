@@ -7,6 +7,7 @@ class OrderController {
     constructor() {
         this.createOrder = this.createOrder.bind(this);
         this.fetchOrders = this.fetchOrders.bind(this);
+        this.calculateTotalPrice = this.calculateTotalPrice.bind(this);
     }
 
     async createOrder(req: AuthRequest, res: Response, next: NextFunction) {
@@ -77,7 +78,15 @@ class OrderController {
         await stocks.forEach((i: OrderType) => {
             total += i.quantity + i.stock.price;
         });
-        Logging.info(total);
+        // Logging.info(total.toFixed(2));
+
+        return res.json({
+            success: true,
+            message: "Total price calculated",
+            data: {
+                total,
+            },
+        });
     }
 }
 
