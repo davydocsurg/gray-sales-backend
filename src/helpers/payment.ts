@@ -28,5 +28,6 @@ export const verifyTransaction = async (ref: string) => {
     const response = await paystack.transaction.verify({
         reference: ref,
     });
-    Logging.error(response);
+
+    return response;
 };
