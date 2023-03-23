@@ -2,7 +2,9 @@ type OrderType = {
     stockId: string;
     quantity: number;
     _id: string;
-    stock: Object;
+    stock: {
+        price: number;
+    };
 };
 
 export type { OrderType };

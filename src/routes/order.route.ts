@@ -17,4 +17,10 @@ orderRoutes.post(
     catchAsync(OrderController.createOrder)
 );
 
+orderRoutes.get(
+    "/checkout",
+    isAuthenticated,
+    catchAsync(OrderController.checkout)
+);
+
 export default orderRoutes;

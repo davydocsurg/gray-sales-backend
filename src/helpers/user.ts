@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 
 import { User } from "../models";
 import { AppError } from ".";
+import { AuthRequest } from "../types";
 
 interface UserCredentials {
     email: undefined;
@@ -66,4 +67,11 @@ const validatePassword = async (
 const findUserByEmail = async (email: undefined) => {
     const user = await User.findOne({ email: email });
     return user;
+};
+
+export const fetchUserStocks = async (req: AuthRequest) => {
+    const user = await req.user.populate("cart.items.stockId");
+    const stocks = user.cart.items;
+
+    return stocks;
 };
