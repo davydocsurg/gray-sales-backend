@@ -12,6 +12,7 @@ stockRoutes.get("/fetch", catchAsync(StockController.fetchStocks));
 stockRoutes.post(
     "/create",
     isAuthenticated,
+    ValidateCreateStockRequest,
     multer({
         storage: stockImageStore,
         fileFilter: fileValidation,

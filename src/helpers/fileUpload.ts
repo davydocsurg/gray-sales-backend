@@ -5,6 +5,7 @@ import fs from "fs";
 // locals
 import cloudinary from "cloudinary";
 import Logging from "./customLog";
+import { AppError } from "./AppError";
 
 export const stockImageStore = multer.diskStorage({
     destination: (req: Request, file: Express.Multer.File, cb: Function) => {
@@ -31,11 +32,19 @@ export const fileValidation = (
     file: Express.Multer.File,
     cb: Function
 ) => {
-    if (file.mimetype == "image/png" || "image/jpg" || "image/jpeg") {
-        cb(null, true);
-    } else {
-        cb(null, false);
+    if (req.files.length > 4) {
+        const error = new AppError(
+            "You can only upload a maximum of 4 images",
+            400
+        );
+        return cb(error, false);
+    } else if (file.mimetype !== "image/png" || "image/jpg" || "image/jpeg") {
+        return cb(
+            new AppError("Only .png, .jpg and .jpeg format allowed!", 400),
+            false
+        );
     }
+    cb(null, true);
 };
 
 export const deleteOldPhoto = async (
