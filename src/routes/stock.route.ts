@@ -9,13 +9,16 @@ const stockRoutes = express.Router();
 
 stockRoutes.get("/fetch", catchAsync(StockController.fetchStocks));
 
+// ValidateCreateStockRequest,
 stockRoutes.post(
     "/create",
-    isAuthenticated,
-    multer({
-        storage: stockImageStore,
-        fileFilter: fileValidation,
-    }).single("images"),
+    [
+        isAuthenticated,
+        multer({
+            storage: stockImageStore,
+            fileFilter: fileValidation,
+        }).array("images"),
+    ],
     catchAsync(StockController.createStock)
 );
 
@@ -27,7 +30,7 @@ stockRoutes.put(
     multer({
         storage: stockImageStore,
         fileFilter: fileValidation,
-    }).single("images"),
+    }).array("images"),
     catchAsync(StockController.updateStock)
 );
 stockRoutes.delete(

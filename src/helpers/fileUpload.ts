@@ -5,33 +5,47 @@ import fs from "fs";
 // locals
 import cloudinary from "cloudinary";
 import Logging from "./customLog";
+import { AppError } from "./AppError";
 
 export const stockImageStore = multer.diskStorage({
-    destination: (req: Request, file: any, cb: Function) => {
+    destination: (req: Request, file: Express.Multer.File, cb: Function) => {
         cb(null, "public/stocks/images");
     },
 
-    filename: (req: Request, file: any, cb: Function) => {
+    filename: (req: Request, file: Express.Multer.File, cb: Function) => {
         cb(null, new Date().toISOString() + "-" + file.originalname);
     },
 });
 
 export const profileImageStore = multer.diskStorage({
-    destination: (req: Request, file: any, cb: Function) => {
+    destination: (req: Request, file: Express.Multer.File, cb: Function) => {
         cb(null, "public/users");
     },
 
-    filename: (req: Request, file: any, cb: Function) => {
+    filename: (req: Request, file: Express.Multer.File, cb: Function) => {
         cb(null, new Date().toISOString() + "-" + file.originalname);
     },
 });
 
-export const fileValidation = (req: Request, file: any, cb: Function) => {
-    if (file.mimetype == "image/png" || "image/jpg" || "image/jpeg") {
-        cb(null, true);
-    } else {
-        cb(null, false);
+export const fileValidation = (
+    req: Request,
+    file: Express.Multer.File,
+    cb: Function
+) => {
+    const allowedMimeTypes = ["image/jpeg", "image/png", "image/jpg"];
+    if (req.files.length > 4) {
+        const error = new AppError(
+            "You can only upload a maximum of 4 images",
+            400
+        );
+        return cb(error, false);
+    } else if (!allowedMimeTypes.includes(file.mimetype)) {
+        return cb(
+            new AppError("Only .png, .jpg and .jpeg format allowed!", 400),
+            false
+        );
     }
+    cb(null, true);
 };
 
 export const deleteOldPhoto = async (
