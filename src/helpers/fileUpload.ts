@@ -32,13 +32,14 @@ export const fileValidation = (
     file: Express.Multer.File,
     cb: Function
 ) => {
+    const allowedMimeTypes = ["image/jpeg", "image/png", "image/jpg"];
     if (req.files.length > 4) {
         const error = new AppError(
             "You can only upload a maximum of 4 images",
             400
         );
         return cb(error, false);
-    } else if (file.mimetype !== "image/png" || "image/jpg" || "image/jpeg") {
+    } else if (!allowedMimeTypes.includes(file.mimetype)) {
         return cb(
             new AppError("Only .png, .jpg and .jpeg format allowed!", 400),
             false
