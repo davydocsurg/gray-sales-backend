@@ -15,7 +15,7 @@ stockRoutes.post(
     multer({
         storage: stockImageStore,
         fileFilter: fileValidation,
-    }).single("images"),
+    }).array("images"),
     catchAsync(StockController.createStock)
 );
 
@@ -27,7 +27,7 @@ stockRoutes.put(
     multer({
         storage: stockImageStore,
         fileFilter: fileValidation,
-    }).single("images"),
+    }).array("images"),
     catchAsync(StockController.updateStock)
 );
 stockRoutes.delete(

@@ -73,10 +73,10 @@ class StockController {
             const title = req.body.title;
             const description = req.body.description;
             const price = req.body.price;
-            const images = req.file;
+            const images = req.files;
             const categoryId = req.body.categoryId;
 
-            // return Logging.error(req.file + "mnfknkak");
+            // return Logging.error(images + "mnfknkak");
             const stock = await Stock.create({
                 title,
                 description,
