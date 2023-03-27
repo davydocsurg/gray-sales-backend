@@ -15,13 +15,14 @@ const swaggerOptions = {
                 email: "davydocsurg@gmail.com",
                 url: "https://chibueze.me",
             },
-            servers: [
-                {
-                    url: "http://localhost:8080/api/v1",
-                    description: "Local Server",
-                },
-            ],
         },
+
+        servers: [
+            {
+                url: "http://localhost:8080/api/v1",
+                description: "Local Server",
+            },
+        ],
     },
     apis: ["src/routes/v1/*.ts"],
 };
@@ -35,7 +36,7 @@ const swaggerDocs = (app: any, port: Number) => {
         res.send(specs);
     });
 
-    Logging.success(
+    Logging.warn(
         `Swagger docs available at http://localhost:${port}/api/v1/docs`
     );
 };
