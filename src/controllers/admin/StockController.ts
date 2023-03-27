@@ -28,6 +28,7 @@ class StockController {
         try {
             const stocksCount = await StockService.countStocks();
             const stocks = await StockService.fetchStocks(res);
+
             return res.status(200).json({
                 success: true,
                 results: 1,
@@ -48,10 +49,7 @@ class StockController {
 
     async fetchUserStocks(req: Request, res: Response, next: NextFunction) {
         try {
-            const userId = req.params.userId;
-            const userStocksCount = await Stock.find({
-                user: userId,
-            }).countDocuments();
+            const userStocksCount = await StockService.fetchUserStocks(req);
 
             return res.json({
                 success: true,
@@ -86,16 +84,7 @@ class StockController {
 
     async fetchStock(req: Request, res: Response, next: NextFunction) {
         try {
-            const stockId = req.params.stockId;
-
-            const stock = await Stock.findById(stockId);
-
-            if (stock === null) {
-                return res.json({
-                    success: false,
-                    message: "Stock does not exist",
-                });
-            }
+            const stock = await StockService.fetchStock(req, res);
 
             return res.status(200).json({
                 success: true,
@@ -114,14 +103,7 @@ class StockController {
         }
     }
 
-    async updateStock(req: Request, res: Response, next: NextFunction) {
-        const stockId = req.params.stockId;
-        const title = req.body.title;
-        const description = req.body.description;
-        const price = req.body.price;
-        const images = req.file;
-        const categoryId = req.body.categoryId;
-
+    async updateStock(req: AuthRequest, res: Response, next: NextFunction) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.json({
@@ -130,24 +112,7 @@ class StockController {
         }
 
         try {
-            const updatedData = {
-                title: title,
-                description: description,
-                price: price,
-                images: images,
-                categoryId: categoryId,
-            };
-
-            const stock = await Stock.findById(stockId);
-
-            const updatedStock = await Stock.findByIdAndUpdate(
-                stockId,
-                updatedData
-            );
-
-            const oldPhoto = stock?.images[0].path;
-
-            await deleteOldPhoto(oldPhoto, DEFAULT_STOCK_PHOTO);
+            const updatedStock = await StockService.updateStock(req);
 
             return res.status(200).json({
                 success: true,

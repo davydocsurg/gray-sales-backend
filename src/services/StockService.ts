@@ -1,4 +1,6 @@
 import { NextFunction, Request, Response } from "express";
+import { DEFAULT_STOCK_PHOTO } from "../commons/constants";
+import { deleteOldPhoto } from "../helpers";
 import { Stock } from "../models";
 import { AuthRequest } from "../types";
 
@@ -31,7 +33,14 @@ class StockService {
         return stocksCount;
     }
 
-    async fetchUserStocks(res: Response) {}
+    async fetchUserStocks(req: Request) {
+        const userId = req.params.userId;
+        const userStocksCount = await Stock.find({
+            user: userId,
+        }).countDocuments();
+
+        return userStocksCount;
+    }
 
     async createStock(req: AuthRequest) {
         const {
@@ -44,8 +53,8 @@ class StockService {
             pickUpTimes,
             listFor,
             quantity,
-        } = req.body;
-        const images = req.files;
+            images,
+        } = this.fetchRequestBody(req);
 
         const stock = await Stock.create({
             title,
@@ -64,11 +73,91 @@ class StockService {
         return stock;
     }
 
-    async fetchStock(req: AuthRequest, res: Response, next: NextFunction) {}
+    async fetchStock(req: Request, res: Response) {
+        const stockId = req.params.stockId;
 
-    async updateStock(req: AuthRequest, res: Response, next: NextFunction) {}
+        const stock = await Stock.findById(stockId);
+        if (stock === null) {
+            return res.json({
+                success: false,
+                message: "Stock does not exist",
+            });
+        }
+
+        return stock;
+    }
+
+    async updateStock(req: AuthRequest) {
+        const {
+            title,
+            description,
+            price,
+            categoryId,
+            type,
+            location,
+            pickUpTimes,
+            listFor,
+            quantity,
+            images,
+        } = this.fetchRequestBody(req);
+        const stockId = req.params.stockId;
+
+        const updatedData = {
+            title,
+            description,
+            price,
+            images,
+            categoryId,
+            type,
+            location,
+            pickUpTimes,
+            quantity,
+            listFor,
+        };
+
+        const stock = await Stock.findById(stockId);
+
+        const updatedStock = await Stock.findByIdAndUpdate(
+            stockId,
+            updatedData
+        );
+
+        const oldPhoto = stock?.images[0].path;
+
+        await deleteOldPhoto(oldPhoto, DEFAULT_STOCK_PHOTO);
+
+        return updatedStock;
+    }
 
     async deleteStock(req: AuthRequest, res: Response, next: NextFunction) {}
+
+    fetchRequestBody(req: AuthRequest) {
+        const {
+            title,
+            description,
+            price,
+            categoryId,
+            type,
+            location,
+            pickUpTimes,
+            listFor,
+            quantity,
+        } = req.body;
+        const images = req.files;
+
+        return {
+            title,
+            description,
+            price,
+            categoryId,
+            type,
+            location,
+            pickUpTimes,
+            listFor,
+            quantity,
+            images,
+        };
+    }
 }
 
 export default new StockService();
