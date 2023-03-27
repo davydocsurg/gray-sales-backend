@@ -134,12 +134,7 @@ class StockController {
 
     async deleteStock(req: Request, res: Response, next: NextFunction) {
         try {
-            const stockId = req.params.stockId;
-            const prevStock = await Stock.findById(stockId);
-
-            const photo = prevStock?.images[0].path;
-            await deleteOldPhoto(photo, DEFAULT_STOCK_PHOTO);
-            await Stock.findByIdAndDelete(stockId);
+            await StockService.deleteStock(req);
 
             return res.status(200).json({
                 success: true,
@@ -163,13 +158,9 @@ class StockController {
         next: NextFunction
     ) {
         try {
-            const categoryId = req.params.categoryId;
-
-            // find all stocks by category
-            const categoryStocks = await Stock.find({
-                categoryId,
-            });
-            Logging.info(categoryStocks);
+            const categoryStocks = await StockService.fetchStocksByCategory(
+                req
+            );
 
             return res.status(200).json({
                 success: true,
