@@ -152,7 +152,11 @@ class StockController {
         }
     }
 
-    async fetchStocksByCategory(req: Request, res: Response) {
+    async fetchStocksByCategory(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
         try {
             const categoryStocks = await StockService.fetchStocksByCategory(
                 req
