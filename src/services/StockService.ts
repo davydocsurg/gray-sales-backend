@@ -12,7 +12,7 @@ class StockService {
         this.updateStock = this.updateStock.bind(this);
         this.deleteStock = this.deleteStock.bind(this);
         this.fetchUserStocks = this.fetchUserStocks.bind(this);
-        this.fetchStocksByCategory = this.fetchRequestParams.bind(this);
+        // this.fetchStocksByCategory = this.fetchRequestParams.bind(this);
     }
 
     async fetchStocks(res: Response) {
