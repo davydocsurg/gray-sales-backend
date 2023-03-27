@@ -44,6 +44,7 @@ const StockSchema: Schema = new mongoose.Schema(
         pickUpTimes: {
             type: String,
             required: [true, "Kindly provide pick up times"],
+            // times must be during the day
         },
 
         listFor: {
@@ -52,9 +53,9 @@ const StockSchema: Schema = new mongoose.Schema(
                 true,
                 "Kindly provide how long your listing will be available",
             ],
-            // provide a range of 1-30 days
-            min: [1, "Minimum value is 1"],
-            max: [30, "Maximum value is 30"],
+            // provide a range of 1-15 days
+            min: [1, "Minimum number of days must be 1"],
+            max: [15, "Maximum number of days is 15"],
         },
 
         images: {
