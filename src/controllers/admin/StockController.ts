@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
-import fs from "fs";
 import { DEFAULT_STOCK_PHOTO } from "../../commons/constants";
 
 // locals
-import { deleteOldPhoto, Logging, uploadImage } from "../../helpers";
-import { Category, Stock } from "../../models";
+import { deleteOldPhoto, Logging } from "../../helpers";
+import { Stock } from "../../models";
 import { AuthRequest } from "../../types";
 
 class StockController {
@@ -70,11 +69,8 @@ class StockController {
 
     async createStock(req: AuthRequest, res: Response, next: NextFunction) {
         try {
-            const title = req.body.title;
-            const description = req.body.description;
-            const price = req.body.price;
+            const { title, description, price, categoryId, type } = req.body;
             const images = req.files;
-            const categoryId = req.body.categoryId;
 
             // return Logging.error(images + "mnfknkak");
             const stock = await Stock.create({

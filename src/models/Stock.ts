@@ -22,12 +22,46 @@ const StockSchema: Schema = new mongoose.Schema(
 
         price: {
             type: Number,
-            required: [true, "Price field is required"],
+            required: function () {
+                return this.type === "paid";
+            },
+        },
+
+        type: {
+            type: String,
+            enum: {
+                values: ["free", "paid"],
+                message:
+                    "{VALUE} is not supported. Accepted values are: free and paid",
+            },
+        },
+
+        location: {
+            type: String,
+            required: [true, "Location is required"],
+        },
+
+        pickUpTimes: {
+            type: String,
+            required: [true, "Kindly provide pick up times"],
+        },
+
+        listFor: {
+            type: Number,
+            required: [
+                true,
+                "Kindly provide how long your listing will be available",
+            ],
         },
 
         images: {
             type: Array,
             required: [true, "At least one image is required"],
+        },
+
+        quantity: {
+            type: Number,
+            required: [true, "Quantity is required"],
         },
 
         categoryId: {
