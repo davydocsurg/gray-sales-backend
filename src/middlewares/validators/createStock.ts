@@ -1,7 +1,7 @@
 import { check } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 import validate from "./validate";
-import { Category, Stock } from "../../models";
+import { Category, Stock } from "../../models/v1";
 import { Logging } from "../../helpers";
 
 const ValidateCreateStockRequest = (

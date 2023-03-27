@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { Logging } from "../../helpers";
-import { Category } from "../../models";
+import { Logging } from "../../../helpers";
+import { Category } from "../../../models/v1";
 
 class CategoryController {
     constructor() {

@@ -4,9 +4,9 @@ import {
     initializePayment,
     Logging,
     verifyTransaction,
-} from "../helpers";
-import { Order } from "../models";
-import type { AuthRequest, OrderType } from "../types";
+} from "../../helpers";
+import { Order } from "../../models/v1";
+import type { AuthRequest, OrderType } from "../../types";
 
 class OrderController {
     constructor() {

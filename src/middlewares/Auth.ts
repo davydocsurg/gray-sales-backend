@@ -2,7 +2,7 @@ import { NextFunction, Response } from "express";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../commons/constants";
 import { AppError, catchAsync, Logging } from "../helpers";
-import { User } from "../models";
+import { User } from "../models/v1";
 import { AuthRequest } from "../types";
 
 const jwt_key: string = JWT_SECRET;

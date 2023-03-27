@@ -9,9 +9,9 @@ import {
     orderRoutes,
     stockRoutes,
     userRoutes,
-} from "./routes";
+} from "./routes/v1";
 import path from "path";
-import authRoutes from "./routes/auth.route";
+import authRoutes from "./routes/v1/auth.route";
 
 const app: Express = express();
 const allowlist = ["http://localhost:3000", process.env.FRONT_END_URL];
@@ -47,12 +47,12 @@ app.use(
     express.static(path.join(__dirname, "public/stocks/images"))
 );
 
-app.use("/api", authRoutes);
-app.use("/api/category", categoryRoutes);
-app.use("/api/stocks", stockRoutes);
-app.use("/api", userRoutes);
-app.use("/api/cart", cartRoute);
-app.use("/api/orders", orderRoutes);
+app.use("/api/v1", authRoutes);
+app.use("/api/v1/categories", categoryRoutes);
+app.use("/api/v1/stocks", stockRoutes);
+app.use("/api/v1", userRoutes);
+app.use("/api/v1/carts", cartRoute);
+app.use("/api/v1/orders", orderRoutes);
 
 app.use(errorHandler);
 

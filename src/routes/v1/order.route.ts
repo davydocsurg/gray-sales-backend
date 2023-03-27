@@ -1,7 +1,7 @@
 import express from "express";
-import { OrderController } from "../controllers";
-import { catchAsync } from "../helpers";
-import { isAuthenticated } from "../middlewares";
+import { OrderController } from "../../controllers/v1";
+import { catchAsync } from "../../helpers";
+import { isAuthenticated } from "../../middlewares";
 
 const orderRoutes = express.Router();
 

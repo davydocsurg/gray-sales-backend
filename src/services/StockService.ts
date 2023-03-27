@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { DEFAULT_STOCK_PHOTO } from "../commons/constants";
 import { deleteOldPhoto } from "../helpers";
-import { Stock } from "../models";
+import { Stock } from "../models/v1";
 import { AuthRequest } from "../types";
 
 class StockService {
@@ -12,6 +12,7 @@ class StockService {
         this.updateStock = this.updateStock.bind(this);
         this.deleteStock = this.deleteStock.bind(this);
         this.fetchUserStocks = this.fetchUserStocks.bind(this);
+        // this.fetchStocksByCategory = this.fetchRequestParams.bind(this);
     }
 
     async fetchStocks(res: Response) {
@@ -74,7 +75,7 @@ class StockService {
     }
 
     async fetchStock(req: Request, res: Response) {
-        const stockId = req.params.stockId;
+        const { stockId } = this.fetchRequestParams(req);
 
         const stock = await Stock.findById(stockId);
         if (stock === null) {
@@ -100,7 +101,7 @@ class StockService {
             quantity,
             images,
         } = this.fetchRequestBody(req);
-        const stockId = req.params.stockId;
+        const { stockId } = this.fetchRequestParams(req);
 
         const updatedData = {
             title,
@@ -129,7 +130,25 @@ class StockService {
         return updatedStock;
     }
 
-    async deleteStock(req: AuthRequest, res: Response, next: NextFunction) {}
+    async deleteStock(req: AuthRequest, res: Response, next: NextFunction) {
+        const { stockId } = this.fetchRequestParams(req);
+        const prevStock = await Stock.findById(stockId);
+
+        const photo = prevStock?.images[0].path;
+        await deleteOldPhoto(photo, DEFAULT_STOCK_PHOTO);
+        await Stock.findByIdAndDelete(stockId);
+
+        return true;
+    }
+
+    async fetchStocksByCategory(req: Request) {
+        const { categoryId } = this.fetchRequestParams(req);
+        const categoryStocks = await Stock.find({
+            categoryId,
+        });
+
+        return categoryStocks;
+    }
 
     fetchRequestBody(req: AuthRequest) {
         const {
@@ -157,6 +176,12 @@ class StockService {
             quantity,
             images,
         };
+    }
+
+    fetchRequestParams(req: Request) {
+        const { stockId, categoryId } = req.params;
+
+        return { stockId, categoryId };
     }
 }
 

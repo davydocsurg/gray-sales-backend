@@ -4,7 +4,7 @@ import { DEFAULT_STOCK_PHOTO } from "../../commons/constants";
 
 // locals
 import { deleteOldPhoto, Logging } from "../../helpers";
-import { Stock } from "../../models";
+import { Stock } from "../../models/v1";
 import { StockService } from "../../services";
 import { AuthRequest } from "../../types";
 
