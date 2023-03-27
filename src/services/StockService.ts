@@ -12,13 +12,26 @@ class StockService {
         this.fetchUserStocks = this.fetchUserStocks.bind(this);
     }
 
-    async fetchStocks(req: AuthRequest, res: Response, next: NextFunction) {}
+    async fetchStocks(res: Response) {
+        const stocksCount = this.countStocks();
+        const stocks = (await Stock.find()).reverse();
 
-    async fetchUserStocks(
-        req: AuthRequest,
-        res: Response,
-        next: NextFunction
-    ) {}
+        if (!stocksCount) {
+            return res.json({
+                message: "No stocks found",
+            });
+        }
+
+        return stocks;
+    }
+
+    async countStocks() {
+        const stocksCount = await Stock.find().countDocuments();
+
+        return stocksCount;
+    }
+
+    async fetchUserStocks(res: Response) {}
 
     async createStock(req: AuthRequest) {
         const {

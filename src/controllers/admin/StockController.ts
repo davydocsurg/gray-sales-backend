@@ -26,14 +26,8 @@ class StockController {
             });
         }
         try {
-            const stocksCount = await Stock.find().countDocuments();
-            const stocks = (await Stock.find()).reverse();
-
-            if (!stocksCount) {
-                return res.json({
-                    message: "No stocks found",
-                });
-            }
+            const stocksCount = await StockService.countStocks();
+            const stocks = await StockService.fetchStocks(res);
             return res.status(200).json({
                 success: true,
                 results: 1,
