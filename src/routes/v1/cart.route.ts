@@ -1,7 +1,7 @@
 import express from "express";
-import { CartController } from "../controllers/v1";
-import { catchAsync } from "../helpers";
-import { isAuthenticated } from "../middlewares";
+import { CartController } from "../../controllers/v1";
+import { catchAsync } from "../../helpers";
+import { isAuthenticated } from "../../middlewares";
 
 const cartRoute = express.Router();
 

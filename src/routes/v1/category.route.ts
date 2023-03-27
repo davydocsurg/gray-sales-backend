@@ -1,7 +1,7 @@
 import express from "express";
-import CategoryController from "../controllers/v1/admin/CategoryController";
-import { catchAsync } from "../helpers";
-import { ValidateCreateCategoryRequest } from "../middlewares/validators";
+import CategoryController from "../../controllers/v1/admin/CategoryController";
+import { catchAsync } from "../../helpers";
+import { ValidateCreateCategoryRequest } from "../../middlewares/validators";
 
 const categoryRoutes = express.Router();
 
