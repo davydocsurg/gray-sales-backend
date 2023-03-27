@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import { AppError, checkUser, Logging } from "../../helpers";
-import User from "../../models/User";
+import User from "../../models/v1/User";
 import { verifyUserLoginDetails } from "../../helpers/user";
 import { cookieOptions, JWT_SECRET } from "../../commons/constants";
 import { AuthRequest } from "../../types";

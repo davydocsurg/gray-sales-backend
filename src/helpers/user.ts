@@ -1,7 +1,7 @@
 import { NextFunction, Response } from "express";
 import bcrypt from "bcryptjs";
 
-import { User } from "../models";
+import { User } from "../models/v1";
 import { AppError } from ".";
 import { AuthRequest } from "../types";
 

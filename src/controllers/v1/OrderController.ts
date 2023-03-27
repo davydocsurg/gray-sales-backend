@@ -5,7 +5,7 @@ import {
     Logging,
     verifyTransaction,
 } from "../../helpers";
-import { Order } from "../../models";
+import { Order } from "../../models/v1";
 import type { AuthRequest, OrderType } from "../../types";
 
 class OrderController {

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { DEFAULT_STOCK_PHOTO } from "../commons/constants";
 import { deleteOldPhoto } from "../helpers";
-import { Stock } from "../models";
+import { Stock } from "../models/v1";
 import { AuthRequest } from "../types";
 
 class StockService {
