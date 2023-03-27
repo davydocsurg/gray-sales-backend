@@ -7,7 +7,7 @@ process.on("uncaughtException", (err) => {
 });
 
 import app from "./app";
-import { mongoDBConnection } from "./config";
+import { mongoDBConnection, swaggerDocs } from "./config";
 import { Logging } from "./helpers";
 
 mongoDBConnection();
@@ -17,6 +17,7 @@ if (!process.env.APP_PORT) {
 exports.APP_PORT = parseInt(process.env.APP_PORT, 10);
 const server = app.listen(exports.APP_PORT, () => {
     Logging.info(`🚀 Server ready at port: ${exports.APP_PORT}`);
+    swaggerDocs(app, exports.APP_PORT);
 });
 process.on("unhandledRejection", (err) => {
     Logging.error(err);

@@ -1,3 +1,4 @@
 import { mongoDBConnection } from "./database";
+import swaggerDocs from "./docs/v1/swagger";
 
-export { mongoDBConnection };
+export { mongoDBConnection, swaggerDocs };

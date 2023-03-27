@@ -35,7 +35,7 @@ const swaggerDocs = (app: any, port: Number) => {
         res.send(specs);
     });
 
-    Logging.info(
+    Logging.success(
         `Swagger docs available at http://localhost:${port}/api/v1/docs`
     );
 };
