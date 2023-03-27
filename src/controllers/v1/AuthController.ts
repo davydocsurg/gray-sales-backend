@@ -2,11 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import { AppError, checkUser, Logging } from "../helpers";
-import User from "../models/User";
-import { verifyUserLoginDetails } from "../helpers/user";
-import { cookieOptions, JWT_SECRET } from "../commons/constants";
-import { AuthRequest } from "../types";
+import { AppError, checkUser, Logging } from "../../helpers";
+import User from "../../models/User";
+import { verifyUserLoginDetails } from "../../helpers/user";
+import { cookieOptions, JWT_SECRET } from "../../commons/constants";
+import { AuthRequest } from "../../types";
 
 const signToken = (id: string, type: string) => {
     const jwt_key: string = JWT_SECRET;

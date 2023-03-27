@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { Logging } from "../helpers";
-import { Stock } from "../models";
-import { AuthRequest } from "../types";
+import { Logging } from "../../helpers";
+import { Stock } from "../../models";
+import { AuthRequest } from "../../types";
 
 class CartController {
     constructor() {

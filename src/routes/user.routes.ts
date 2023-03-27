@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import { UserController } from "../controllers";
+import { UserController } from "../controllers/v1";
 import { catchAsync, fileValidation, profileImageStore } from "../helpers";
 import { isAuthenticated } from "../middlewares";
 

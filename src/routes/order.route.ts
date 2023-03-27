@@ -1,5 +1,5 @@
 import express from "express";
-import { OrderController } from "../controllers";
+import { OrderController } from "../controllers/v1";
 import { catchAsync } from "../helpers";
 import { isAuthenticated } from "../middlewares";
 

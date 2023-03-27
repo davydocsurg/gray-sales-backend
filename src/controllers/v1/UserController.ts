@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 
 // locals
-import { AppError, deleteOldPhoto, Logging } from "../helpers";
-import { Stock } from "../models";
-import User from "../models/User";
-import { AuthRequest } from "../types";
+import { AppError, deleteOldPhoto, Logging } from "../../helpers";
+import { Stock } from "../../models";
+import User from "../../models/User";
+import { AuthRequest } from "../../types";
 
 class UserController {
     constructor() {

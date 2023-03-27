@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import { StockController } from "../controllers";
+import { StockController } from "../controllers/v1";
 import { catchAsync, stockImageStore, fileValidation } from "../helpers";
 import { isAuthenticated } from "../middlewares";
 import { ValidateCreateStockRequest } from "../middlewares/validators";
