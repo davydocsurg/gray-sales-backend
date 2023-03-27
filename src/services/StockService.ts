@@ -20,7 +20,7 @@ class StockService {
         next: NextFunction
     ) {}
 
-    async createStock(req: AuthRequest, res: Response, next: NextFunction) {
+    async createStock(req: AuthRequest) {
         const {
             title,
             description,

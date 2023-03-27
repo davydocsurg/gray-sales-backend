@@ -52,6 +52,9 @@ const StockSchema: Schema = new mongoose.Schema(
                 true,
                 "Kindly provide how long your listing will be available",
             ],
+            // provide a range of 1-30 days
+            min: [1, "Minimum value is 1"],
+            max: [30, "Maximum value is 30"],
         },
 
         images: {

@@ -5,6 +5,7 @@ import { DEFAULT_STOCK_PHOTO } from "../../commons/constants";
 // locals
 import { deleteOldPhoto, Logging } from "../../helpers";
 import { Stock } from "../../models";
+import { StockService } from "../../services";
 import { AuthRequest } from "../../types";
 
 class StockController {
@@ -69,18 +70,7 @@ class StockController {
 
     async createStock(req: AuthRequest, res: Response, next: NextFunction) {
         try {
-            const { title, description, price, categoryId, type } = req.body;
-            const images = req.files;
-
-            // return Logging.error(images + "mnfknkak");
-            const stock = await Stock.create({
-                title,
-                description,
-                price,
-                images,
-                categoryId,
-                user: req?.user,
-            });
+            const stock = await StockService.createStock(req);
 
             return res.status(200).json({
                 success: true,
