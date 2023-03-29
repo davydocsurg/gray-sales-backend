@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import SwaggerJSDoc from "swagger-jsdoc";
 import SwaggerUI from "swagger-ui-express";
+import express from "express";
 import { Logging } from "../../../helpers";
+
+const router = express.Router();
 
 const swaggerOptions = {
     definition: {
@@ -19,19 +22,29 @@ const swaggerOptions = {
 
         servers: [
             {
-                url: "http://localhost:8080/api/v1",
+                url: "http://localhost:8080",
                 description: "Local Server",
             },
         ],
     },
-    apis: ["src/routes/v1/*.ts"],
+    apis: [
+        "../../../routes/v1/*.ts",
+        "../../../models/v1/*.ts",
+        "../../../controllers/v1/*.ts",
+    ],
 };
 
 const specs = SwaggerJSDoc(swaggerOptions);
 
 const swaggerDocs = (app: any, port: Number) => {
-    app.use("/api/v1/docs", SwaggerUI.serve, SwaggerUI.setup(specs));
-    app.get("api/v1/docs.json", (req: Request, res: Response) => {
+    app.use(
+        "/api/v1/docs",
+        SwaggerUI.serve,
+        SwaggerUI.setup(specs, {
+            explorer: true,
+        })
+    );
+    app.get("/api/v1/docs.json", (req: Request, res: Response) => {
         res.setHeader("Content-Type", "application/json");
         res.send(specs);
     });
