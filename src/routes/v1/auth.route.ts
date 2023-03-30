@@ -7,10 +7,13 @@ const authRoutes = express.Router();
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
+ * /register:
+ *   get:
+ *     summary: Get all users
+ *     description: Returns all users
+ *     responses:
+ *       200:
+ *         description: OK
  */
 authRoutes.post(
     "/register",
