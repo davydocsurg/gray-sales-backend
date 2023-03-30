@@ -12,6 +12,7 @@ import {
 } from "./routes/v1";
 import path from "path";
 import authRoutes from "./routes/v1/auth.route";
+import { swaggerDocs } from "./config";
 
 const app: Express = express();
 const allowlist = ["http://localhost:3000", process.env.FRONT_END_URL];
