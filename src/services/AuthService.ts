@@ -1,0 +1,82 @@
+import { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
+import { cookieOptions, JWT_SECRET } from "../commons/constants";
+
+import { checkUser } from "../helpers";
+import { User } from "../models/v1";
+
+const signToken = (id: string, type: string) => {
+    const jwt_key: string = JWT_SECRET;
+    const token = jwt.sign({ id, type }, jwt_key, { expiresIn: "1d" });
+    return token;
+};
+
+const createSendToken = (
+    user: any,
+    statusCode: number = 200,
+    res: Response
+) => {
+    const token = signToken(user._id, user.type);
+    if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
+    res.cookie("jwt", token, cookieOptions);
+    res.status(statusCode).json({
+        success: true,
+        token,
+        user,
+    });
+};
+
+class AuthService {
+    constructor() {
+        this.registerUser = this.registerUser.bind(this);
+        // this.login = this.login.bind(this);
+    }
+
+    async registerUser(req: Request, res: Response, next: NextFunction) {
+        try {
+            const {
+                firstName,
+                lastName,
+                email,
+                password,
+                passwordConfirmation,
+            } = this.fetchRequest(req);
+
+            const userExists = await checkUser(email, res, next);
+            if (userExists) {
+                return res.status(409).json({
+                    success: false,
+                    message: "User Already Exist. Please Login",
+                });
+            }
+
+            const user = await User.create({
+                firstName,
+                lastName,
+                email,
+                password,
+                passwordConfirmation,
+                type: "vendor",
+                verificationStatus: "unverfied",
+                cart: { items: [] },
+            });
+        } catch (error: unknown) {}
+    }
+
+    async login(req: Request, res: Response, next: NextFunction) {}
+
+    async logout(req: Request, res: Response, next: NextFunction) {}
+
+    fetchRequest(req: Request) {
+        const { firstName, lastName, email, password, passwordConfirmation } =
+            req.body;
+
+        return {
+            firstName,
+            lastName,
+            email,
+            password,
+            passwordConfirmation,
+        };
+    }
+}
