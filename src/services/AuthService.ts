@@ -2,8 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { cookieOptions, JWT_SECRET } from "../commons/constants";
 
-import { checkUser } from "../helpers";
+import { AppError, checkUser } from "../helpers";
 import { User } from "../models/v1";
+import { AuthRequest } from "../types";
 
 const signToken = (id: string, type: string) => {
     const jwt_key: string = JWT_SECRET;
@@ -62,7 +63,22 @@ class AuthService {
         // } catch (error: unknown) {}
     }
 
-    async login(req: Request, res: Response, next: NextFunction) {}
+    async login(req: AuthRequest, res: Response, next: NextFunction) {
+        const { email, password } = this.fetchRequest(req);
+
+        const user = await User.findOne({ email }).select("+password");
+        if (!user || !(await user.checkPassword(password, user.password))) {
+            let errors = {
+                email: "Email or password is incorrect",
+            };
+            return next(new AppError("Incorrect credentials", 422, errors));
+        }
+        user.password = undefined;
+        req.user = user;
+        createSendToken(user, 200, res);
+
+        createSendToken(user, 200, res);
+    }
 
     async logout(req: Request, res: Response, next: NextFunction) {}
 

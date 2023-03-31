@@ -1,32 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
 
-import { AppError, checkUser, Logging } from "../../helpers";
-import User from "../../models/v1/User";
-import { cookieOptions, JWT_SECRET } from "../../commons/constants";
+import { Logging } from "../../helpers";
 import { AuthRequest } from "../../types";
 import { AuthService } from "../../services";
-
-const signToken = (id: string, type: string) => {
-    const jwt_key: string = JWT_SECRET;
-    const token = jwt.sign({ id, type }, jwt_key, { expiresIn: "1d" });
-    return token;
-};
-
-const createSendToken = (
-    user: any,
-    statusCode: number = 200,
-    res: Response
-) => {
-    const token = signToken(user._id, user.type);
-    if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
-    res.cookie("jwt", token, cookieOptions);
-    res.status(statusCode).json({
-        success: true,
-        token,
-        user,
-    });
-};
 
 class AuthController {
     constructor() {
@@ -53,44 +29,15 @@ class AuthController {
     }
 
     async login(req: AuthRequest, res: Response, next: NextFunction) {
-        const { email, password } = req.body;
-
-        // const user = await verifyUserLoginDetails(email, password, res, next);
-        // if (user === null) {
-        //     return res.json({
-        //         success: false,
-        //         message: "User does not exist. Please Register",
-        //     });
-        // }
-        const user = await User.findOne({ email }).select("+password");
-
-        if (!user || !(await user.checkPassword(password, user.password))) {
-            let errors = {
-                email: "Email or password is incorrect",
-            };
-            return next(new AppError("Incorrect credentials", 422, errors));
+        try {
+            await AuthService.login(req, res, next);
+        } catch (error: unknown) {
+            Logging.error(error);
+            return res.json({
+                success: false,
+                errors: { error },
+            });
         }
-        user.password = undefined;
-        req.user = user;
-        createSendToken(user, 200, res);
-
-        // jwt.sign(
-        //     { user: user },
-        //     "secretKey",
-        //     (err: unknown, token: unknown) => {
-        //         if (err) {
-        //             return Logging.error(err);
-        //         }
-        //         return res.json({
-        //             success: true,
-        //             message: "Login successful",
-        //             data: {
-        //                 user,
-        //                 token: token,
-        //             },
-        //         });
-        //     }
-        // );
     }
 }
 
