@@ -8,10 +8,16 @@ import { Logging } from "../../helpers";
 
 const UserSchema: Schema = new mongoose.Schema(
     {
-        name: {
+        firstName: {
             type: String,
             trim: true,
-            required: [true, "Name is required"],
+            required: [true, "Firstname is required"],
+            minlength: 3,
+        },
+        lastName: {
+            type: String,
+            trim: true,
+            required: [true, "Lastname is required"],
             minlength: 3,
         },
         email: {
@@ -117,7 +123,9 @@ const UserSchema: Schema = new mongoose.Schema(
 
 UserSchema.pre("save", async function (next) {
     // Logging.info(this.id);
-    this.slug = slugify(this.name + this.id, { lower: true });
+    this.slug = slugify(this.firstName + this.lastName + this.id, {
+        lower: true,
+    });
     if (this.isModified("password")) {
         const hashedPassword = await bcrypt.hash(this.password, 12);
         this.password = hashedPassword;

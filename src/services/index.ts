@@ -1,3 +1,4 @@
 import StockService from "./StockService";
+import AuthService from "./AuthService";
 
-export { StockService };
+export { StockService, AuthService };
