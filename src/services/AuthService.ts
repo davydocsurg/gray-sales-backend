@@ -76,8 +76,6 @@ class AuthService {
         user.password = undefined;
         req.user = user;
         createSendToken(user, 200, res);
-
-        createSendToken(user, 200, res);
     }
 
     async logout(req: Request, res: Response, next: NextFunction) {}
