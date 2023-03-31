@@ -9,12 +9,18 @@ const ValidateCreateUserRequest = (
 ) => {
     return validate(
         [
-            check("name")
+            check("firstName")
                 .exists({
                     checkNull: true,
                     checkFalsy: true,
                 })
-                .withMessage("Name is required"),
+                .withMessage("Firstname is required"),
+            check("lastName")
+                .exists({
+                    checkNull: true,
+                    checkFalsy: true,
+                })
+                .withMessage("Lastname is required"),
             check("email")
                 .exists({
                     checkNull: true,
