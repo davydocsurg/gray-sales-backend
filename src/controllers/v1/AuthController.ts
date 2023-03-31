@@ -1,12 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import { AppError, checkUser, Logging } from "../../helpers";
 import User from "../../models/v1/User";
-import { verifyUserLoginDetails } from "../../helpers/user";
 import { cookieOptions, JWT_SECRET } from "../../commons/constants";
 import { AuthRequest } from "../../types";
+import { AuthService } from "../../services";
 
 const signToken = (id: string, type: string) => {
     const jwt_key: string = JWT_SECRET;
@@ -37,31 +36,7 @@ class AuthController {
 
     async createUser(req: Request, res: Response, next: NextFunction) {
         try {
-            const name = req.body.name;
-            const email = req.body.email;
-            const password = req.body.password;
-            const passwordConfirmation = req.body.passwordConfirmation;
-
-            const userExists = await checkUser(email, res, next);
-            if (userExists) {
-                return res.status(409).json({
-                    success: false,
-                    message: "User Already Exist. Please Login",
-                });
-            }
-            // const hashedPwd = await bcrypt.hash(password, 12);
-
-            const user = await User.create({
-                name: name,
-                email: email,
-                password: password,
-                passwordConfirmation: passwordConfirmation,
-                type: "vendor",
-                verificationStatus: "unverfied",
-                cart: { items: [] },
-            });
-
-            await user.save({ validateBeforeSave: false });
+            await AuthService.registerUser(req, res, next);
 
             return res.status(200).json({
                 success: true,

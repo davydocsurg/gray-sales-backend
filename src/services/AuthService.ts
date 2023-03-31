@@ -33,34 +33,33 @@ class AuthService {
     }
 
     async registerUser(req: Request, res: Response, next: NextFunction) {
-        try {
-            const {
-                firstName,
-                lastName,
-                email,
-                password,
-                passwordConfirmation,
-            } = this.fetchRequest(req);
+        // try {
+        const { firstName, lastName, email, password, passwordConfirmation } =
+            this.fetchRequest(req);
 
-            const userExists = await checkUser(email, res, next);
-            if (userExists) {
-                return res.status(409).json({
-                    success: false,
-                    message: "User Already Exist. Please Login",
-                });
-            }
-
-            const user = await User.create({
-                firstName,
-                lastName,
-                email,
-                password,
-                passwordConfirmation,
-                type: "vendor",
-                verificationStatus: "unverfied",
-                cart: { items: [] },
+        const userExists = await checkUser(email, res, next);
+        if (userExists) {
+            return res.status(409).json({
+                success: false,
+                message: "User Already Exist. Please Login",
             });
-        } catch (error: unknown) {}
+        }
+
+        const user = await User.create({
+            firstName,
+            lastName,
+            email,
+            password,
+            passwordConfirmation,
+            type: "vendor",
+            verificationStatus: "unverfied",
+            cart: { items: [] },
+        });
+
+        // createSendToken(user, 201, res);
+        await user.save({ validateBeforeSave: false });
+        return user;
+        // } catch (error: unknown) {}
     }
 
     async login(req: Request, res: Response, next: NextFunction) {}
@@ -80,3 +79,5 @@ class AuthService {
         };
     }
 }
+
+export default new AuthService();
