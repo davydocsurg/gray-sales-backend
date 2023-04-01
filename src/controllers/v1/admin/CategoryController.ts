@@ -36,9 +36,7 @@ class CategoryController {
 
     async fetchCategory(req: Request, res: Response, next: NextFunction) {
         try {
-            const catId = req.params.catId;
-
-            const category = await Category.findById(catId);
+            const category = await CategoryService.fetchCategory(req, res);
 
             return res.status(200).json({
                 success: true,

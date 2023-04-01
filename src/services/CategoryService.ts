@@ -8,6 +8,7 @@ class CategoryService {
         this.createCategory = this.createCategory.bind(this);
         this.updateCategory = this.updateCategory.bind(this);
         this.deleteCategory = this.deleteCategory.bind(this);
+        this.fetchCategory = this.fetchCategory.bind(this);
     }
 
     async fetchCategories(res: Response) {
@@ -33,6 +34,19 @@ class CategoryService {
             backgroundColor,
             value,
         });
+
+        return category;
+    }
+
+    async fetchCategory(req: Request, res: Response) {
+        const { catId } = this.fetchRequestParams(req);
+        const category = await Category.findById(catId);
+
+        if (!category) {
+            return res.status(404).json({
+                message: "Category does not exist",
+            });
+        }
 
         return category;
     }
