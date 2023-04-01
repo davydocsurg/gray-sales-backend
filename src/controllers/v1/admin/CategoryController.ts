@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { Logging } from "../../../helpers";
 import { Category } from "../../../models/v1";
+import { CategoryService } from "../../../services";
 
 class CategoryController {
     constructor() {
@@ -14,14 +15,8 @@ class CategoryController {
 
     async fetchCategories(req: Request, res: Response, next: NextFunction) {
         try {
-            const categoriesCount = await Category.find().countDocuments();
-            const categories = await Category.find();
+            const categories = await CategoryService.fetchCategories(res);
 
-            if (!categoriesCount) {
-                return res.json({
-                    message: "No categories found",
-                });
-            }
             return res.status(200).json({
                 success: true,
                 results: 1,
@@ -64,12 +59,7 @@ class CategoryController {
 
     async createCategory(req: Request, res: Response, next: NextFunction) {
         try {
-            let category = await Category.create({
-                icon: req.body.icon,
-                label: req.body.label,
-                backgroundColor: req.body.backgroundColor,
-                value: req.body.value,
-            });
+            const category = await CategoryService.createCategory(req);
             return res.status(200).json({
                 success: true,
                 results: 1,
