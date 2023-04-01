@@ -79,31 +79,8 @@ class CategoryController {
     }
 
     async updateCategory(req: Request, res: Response, next: NextFunction) {
-        const catId = req.params.catId;
-        const catIcon = req.body.icon;
-        const catbgColor = req.body.backgroundColor;
-        const catLabel = req.body.label;
-        const catValue = req.body.value;
-
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.json({
-                errors: errors,
-            });
-        }
-
         try {
-            const updatedData = {
-                icon: catIcon,
-                backgroundColor: catbgColor,
-                label: catLabel,
-                value: catValue,
-            };
-
-            const category = await Category.findByIdAndUpdate(
-                catId,
-                updatedData
-            );
+            const category = await CategoryService.updateCategory(req, res);
 
             return res.status(200).json({
                 success: true,
@@ -125,8 +102,8 @@ class CategoryController {
 
     async deleteCategory(req: Request, res: Response, next: NextFunction) {
         try {
-            const catId = req.params.catId;
-            const category = await Category.findByIdAndDelete(catId);
+            const category = await CategoryService.deleteCategory(req, res);
+
             return res.status(200).json({
                 success: true,
                 results: 1,
