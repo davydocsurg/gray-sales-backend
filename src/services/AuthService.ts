@@ -30,7 +30,8 @@ const createSendToken = (
 class AuthService {
     constructor() {
         this.registerUser = this.registerUser.bind(this);
-        // this.login = this.login.bind(this);
+        this.login = this.login.bind(this);
+        this.logout = this.logout.bind(this);
     }
 
     async registerUser(req: Request, res: Response, next: NextFunction) {

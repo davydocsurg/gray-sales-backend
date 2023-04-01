@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { Logging } from "../../../helpers";
 import { Category } from "../../../models/v1";
+import { CategoryService } from "../../../services";
 
 class CategoryController {
     constructor() {
@@ -14,14 +15,8 @@ class CategoryController {
 
     async fetchCategories(req: Request, res: Response, next: NextFunction) {
         try {
-            const categoriesCount = await Category.find().countDocuments();
-            const categories = await Category.find();
+            const categories = await CategoryService.fetchCategories(res);
 
-            if (!categoriesCount) {
-                return res.json({
-                    message: "No categories found",
-                });
-            }
             return res.status(200).json({
                 success: true,
                 results: 1,
@@ -41,9 +36,7 @@ class CategoryController {
 
     async fetchCategory(req: Request, res: Response, next: NextFunction) {
         try {
-            const catId = req.params.catId;
-
-            const category = await Category.findById(catId);
+            const category = await CategoryService.fetchCategory(req, res);
 
             return res.status(200).json({
                 success: true,
@@ -64,12 +57,7 @@ class CategoryController {
 
     async createCategory(req: Request, res: Response, next: NextFunction) {
         try {
-            let category = await Category.create({
-                icon: req.body.icon,
-                label: req.body.label,
-                backgroundColor: req.body.backgroundColor,
-                value: req.body.value,
-            });
+            const category = await CategoryService.createCategory(req);
             return res.status(200).json({
                 success: true,
                 results: 1,
@@ -89,31 +77,8 @@ class CategoryController {
     }
 
     async updateCategory(req: Request, res: Response, next: NextFunction) {
-        const catId = req.params.catId;
-        const catIcon = req.body.icon;
-        const catbgColor = req.body.backgroundColor;
-        const catLabel = req.body.label;
-        const catValue = req.body.value;
-
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.json({
-                errors: errors,
-            });
-        }
-
         try {
-            const updatedData = {
-                icon: catIcon,
-                backgroundColor: catbgColor,
-                label: catLabel,
-                value: catValue,
-            };
-
-            const category = await Category.findByIdAndUpdate(
-                catId,
-                updatedData
-            );
+            const category = await CategoryService.updateCategory(req, res);
 
             return res.status(200).json({
                 success: true,
@@ -135,8 +100,8 @@ class CategoryController {
 
     async deleteCategory(req: Request, res: Response, next: NextFunction) {
         try {
-            const catId = req.params.catId;
-            const category = await Category.findByIdAndDelete(catId);
+            const category = await CategoryService.deleteCategory(req, res);
+
             return res.status(200).json({
                 success: true,
                 results: 1,
