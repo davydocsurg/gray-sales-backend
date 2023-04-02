@@ -3,9 +3,10 @@ import multer from "multer";
 import fs from "fs";
 
 // locals
-import cloudinary from "cloudinary";
 import Logging from "./customLog";
 import { AppError } from "./AppError";
+import cloudinary from "../config/cloudinary";
+import { Photo } from "../types";
 
 export const stockImageStore = multer.diskStorage({
     destination: (req: Request, file: Express.Multer.File, cb: Function) => {
@@ -59,26 +60,23 @@ export const deleteOldPhoto = async (
     }
 };
 
-export const uploadImage = async (images: string) => {
-    try {
-        const options = {
-            use_filename: true,
-            unique_filename: false,
-            overwrite: true,
-        };
+const stockFileOptions = {
+    folder: "stocks",
+    use_filename: true,
+    unique_filename: false,
+    overwrite: true,
+    resource_type: "image",
+};
 
-        cloudinary.v2.config({
-            cloud_name: process.env.CLOUD_STORAGE_NAME,
-            api_key: process.env.CLOUD_API_KEY,
-            api_secret: process.env.CLOUD_API_SECRET,
-        });
-
-        let filesCount = 0;
-        const uploads: cloudinary.UploadApiResponse[] = [];
-
-        const result = await cloudinary.v2.uploader.upload(images, options);
+export const uploadImage = {
+    upload: async (file: string) => {
+        const result = await cloudinary.uploader.upload(file, stockFileOptions);
         Logging.info(result);
-    } catch (error) {
-        Logging.error(error);
-    }
+        // return {
+        //     id: result.public_id,
+        //     title: result.original_filename,
+        //     description: result.context?.custom?.description,
+        //     url: result.secure_url,
+        // };
+    },
 };
