@@ -112,7 +112,7 @@ class StockController {
         }
 
         try {
-            const updatedStock = await StockService.updateStock(req);
+            const updatedStock = await StockService.updateStock(req, res);
 
             return res.status(200).json({
                 success: true,

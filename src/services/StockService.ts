@@ -67,6 +67,7 @@ class StockService {
         const uploadImages = await uploadStockImages(
             images as Express.Multer.File[]
         );
+        await deleteLocalImages(images as Express.Multer.File[]);
 
         const stock = await Stock.create({
             title,
@@ -81,8 +82,6 @@ class StockService {
             quantity,
             user: req?.user,
         });
-
-        await deleteLocalImages(images as Express.Multer.File[]);
 
         return stock;
     }
@@ -101,7 +100,7 @@ class StockService {
         return stock;
     }
 
-    async updateStock(req: AuthRequest) {
+    async updateStock(req: AuthRequest, res: Response) {
         const {
             title,
             description,
@@ -116,18 +115,38 @@ class StockService {
         } = this.fetchRequestBody(req);
         const { stockId } = this.fetchRequestParams(req);
 
+        const stock = await Stock.findById(stockId);
+
+        if (!stock) {
+            return res.json({
+                success: false,
+                message: "Stock does not exist",
+            });
+        }
+
         if (images) {
             const uploadedImages = await uploadStockImages(
                 images as Express.Multer.File[]
             );
-            return uploadedImages;
-        }
 
+            const updatedStock = await Stock.findByIdAndUpdate(
+                stockId,
+                {
+                    images: uploadedImages,
+                },
+                { new: true }
+            );
+            const oldPhoto = stock.images;
+
+            await deleteStockImages(oldPhoto);
+            await deleteLocalImages(images as Express.Multer.File[]);
+            return updatedStock;
+        }
+        Logging.info("Updating stock");
         const updatedData = {
             title,
             description,
             price,
-            images,
             categoryId,
             type,
             location,
@@ -136,16 +155,10 @@ class StockService {
             listFor,
         };
 
-        const stock = await Stock.findById(stockId);
-
         const updatedStock = await Stock.findByIdAndUpdate(
             stockId,
             updatedData
         );
-
-        const oldPhoto = stock.images;
-
-        await deleteStockImages(oldPhoto);
 
         return updatedStock;
     }

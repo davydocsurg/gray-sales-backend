@@ -7,6 +7,7 @@ import Logging from "./customLog";
 import { AppError } from "./AppError";
 import cloudinary from "../config/cloudinary";
 import { DEFAULT_STOCK_PHOTO } from "../commons/constants";
+import { Photo } from "../types";
 
 export const stockImageStore = multer.diskStorage({
     destination: (req: Request, file: Express.Multer.File, cb: Function) => {
@@ -34,7 +35,7 @@ export const fileValidation = (
     cb: Function
 ) => {
     const allowedMimeTypes = ["image/jpeg", "image/png", "image/jpg"];
-    if (req.files.length > 4) {
+    if (+req.files.length > 4) {
         const error = new AppError(
             "You can only upload a maximum of 4 images",
             400
@@ -71,7 +72,7 @@ const stockFileOptions = {
 export const uploadImage = {
     upload: async (file: string) => {
         const result = await cloudinary.uploader.upload(file, stockFileOptions);
-        // Logging.info(result);
+        // Logging.success(result);
         return {
             id: result.public_id,
             title: result.original_filename,
@@ -94,11 +95,10 @@ export const uploadStockImages = (images: Express.Multer.File[]) => {
     );
 };
 
-export const deleteStockImages = (images: Express.Multer.File[]) => {
+export const deleteStockImages = (images: Photo[]) => {
     return Promise.all(
-        images.map(async (image: Express.Multer.File) => {
-            Logging.error(image.path);
-            return await uploadImage.delete(image.path);
+        images.map(async (image) => {
+            return await uploadImage.delete(image.id);
         })
     );
 };
