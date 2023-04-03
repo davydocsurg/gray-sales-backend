@@ -124,6 +124,23 @@ class StockService {
             });
         }
 
+        const updatedData = {
+            title,
+            description,
+            price,
+            categoryId,
+            type,
+            location,
+            pickUpTimes,
+            quantity,
+            listFor,
+        };
+
+        const updatedStock = await Stock.findByIdAndUpdate(
+            stockId,
+            updatedData
+        );
+
         if (images) {
             const uploadedImages = await uploadStockImages(
                 images as Express.Multer.File[]
@@ -142,23 +159,6 @@ class StockService {
             await deleteLocalImages(images as Express.Multer.File[]);
             return updatedStock;
         }
-        Logging.info("Updating stock");
-        const updatedData = {
-            title,
-            description,
-            price,
-            categoryId,
-            type,
-            location,
-            pickUpTimes,
-            quantity,
-            listFor,
-        };
-
-        const updatedStock = await Stock.findByIdAndUpdate(
-            stockId,
-            updatedData
-        );
 
         return updatedStock;
     }
