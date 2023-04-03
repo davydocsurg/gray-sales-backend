@@ -6,7 +6,6 @@ import fs from "fs";
 import Logging from "./customLog";
 import { AppError } from "./AppError";
 import cloudinary from "../config/cloudinary";
-import { Photo } from "../types";
 import { DEFAULT_STOCK_PHOTO } from "../commons/constants";
 
 export const stockImageStore = multer.diskStorage({
@@ -98,6 +97,7 @@ export const uploadStockImages = (images: Express.Multer.File[]) => {
 export const deleteStockImages = (images: Express.Multer.File[]) => {
     return Promise.all(
         images.map(async (image: Express.Multer.File) => {
+            Logging.error(image.path);
             return await uploadImage.delete(image.path);
         })
     );

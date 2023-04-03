@@ -3,6 +3,7 @@ import { DEFAULT_STOCK_PHOTO } from "../commons/constants";
 import {
     deleteLocalImages,
     deleteOldPhoto,
+    deleteStockImages,
     Logging,
     uploadImage,
     uploadStockImages,
@@ -81,7 +82,7 @@ class StockService {
             user: req?.user,
         });
 
-        await deleteLocalImages(images);
+        await deleteLocalImages(images as Express.Multer.File[]);
 
         return stock;
     }
@@ -115,6 +116,13 @@ class StockService {
         } = this.fetchRequestBody(req);
         const { stockId } = this.fetchRequestParams(req);
 
+        if (images) {
+            const uploadedImages = await uploadStockImages(
+                images as Express.Multer.File[]
+            );
+            return uploadedImages;
+        }
+
         const updatedData = {
             title,
             description,
@@ -135,9 +143,9 @@ class StockService {
             updatedData
         );
 
-        const oldPhoto = stock?.images[0].path;
+        const oldPhoto = stock.images;
 
-        await deleteOldPhoto(oldPhoto, DEFAULT_STOCK_PHOTO);
+        await deleteStockImages(oldPhoto);
 
         return updatedStock;
     }
