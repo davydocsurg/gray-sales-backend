@@ -71,12 +71,12 @@ const stockFileOptions = {
 export const uploadImage = {
     upload: async (file: string) => {
         const result = await cloudinary.uploader.upload(file, stockFileOptions);
-        Logging.info(result);
-        // return {
-        //     id: result.public_id,
-        //     title: result.original_filename,
-        //     description: result.context?.custom?.description,
-        //     url: result.secure_url,
-        // };
+        // Logging.info(result);
+        return {
+            id: result.public_id,
+            title: result.original_filename,
+            // description: result.context?.custom?.description,
+            url: result.secure_url,
+        };
     },
 };

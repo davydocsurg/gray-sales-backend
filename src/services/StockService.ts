@@ -12,7 +12,7 @@ class StockService {
         this.updateStock = this.updateStock.bind(this);
         this.deleteStock = this.deleteStock.bind(this);
         this.fetchUserStocks = this.fetchUserStocks.bind(this);
-        // this.fetchStocksByCategory = this.fetchRequestParams.bind(this);
+        this.fetchStocksByCategory = this.fetchRequestParams.bind(this);
     }
 
     async fetchStocks(res: Response) {
@@ -65,20 +65,11 @@ class StockService {
             )
         );
 
-        // delete local files after upload
-        await Promise.all(
-            (images as Express.Multer.File[]).map(
-                (image: Express.Multer.File) => {
-                    deleteOldPhoto(image.path, DEFAULT_STOCK_PHOTO);
-                    Logging.info("Deleted local file");
-                }
-            )
-        );
         const stock = await Stock.create({
             title,
             description,
             price,
-            uploadImages,
+            images: uploadImages,
             categoryId,
             type,
             location,
@@ -87,6 +78,14 @@ class StockService {
             quantity,
             user: req?.user,
         });
+
+        await Promise.all(
+            (images as Express.Multer.File[]).map(
+                (image: Express.Multer.File) => {
+                    deleteOldPhoto(image.path, DEFAULT_STOCK_PHOTO);
+                }
+            )
+        );
 
         return stock;
     }
