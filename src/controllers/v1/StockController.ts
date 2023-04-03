@@ -3,7 +3,7 @@ import { validationResult } from "express-validator";
 import { DEFAULT_STOCK_PHOTO } from "../../commons/constants";
 
 // locals
-import { deleteOldPhoto, Logging } from "../../helpers";
+import { deleteOldPhoto, Logging, uploadImage } from "../../helpers";
 import { Stock } from "../../models/v1";
 import { StockService } from "../../services";
 import { AuthRequest } from "../../types";
@@ -132,7 +132,7 @@ class StockController {
         }
     }
 
-    async deleteStock(req: Request, res: Response, next: NextFunction) {
+    async deleteStock(req: AuthRequest, res: Response, next: NextFunction) {
         try {
             await StockService.deleteStock(req);
 
