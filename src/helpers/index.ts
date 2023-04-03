@@ -6,6 +6,9 @@ import {
     uploadImage,
     profileImageStore,
     deleteOldPhoto,
+    deleteStockImages,
+    uploadStockImages,
+    deleteLocalImages,
 } from "./fileUpload";
 import { checkUser, fetchUserStocks } from "./user";
 import { AppError } from "./AppError";
@@ -24,4 +27,7 @@ export {
     uploadImage,
     initializePayment,
     verifyTransaction,
+    deleteStockImages,
+    uploadStockImages,
+    deleteLocalImages,
 };

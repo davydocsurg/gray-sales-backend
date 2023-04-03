@@ -7,6 +7,7 @@ import Logging from "./customLog";
 import { AppError } from "./AppError";
 import cloudinary from "../config/cloudinary";
 import { Photo } from "../types";
+import { DEFAULT_STOCK_PHOTO } from "../commons/constants";
 
 export const stockImageStore = multer.diskStorage({
     destination: (req: Request, file: Express.Multer.File, cb: Function) => {
@@ -79,4 +80,33 @@ export const uploadImage = {
             url: result.secure_url,
         };
     },
+
+    delete: async (file: string) => {
+        const result = await cloudinary.uploader.destroy(file);
+        return result;
+    },
+};
+
+export const uploadStockImages = (images: Express.Multer.File[]) => {
+    return Promise.all(
+        images.map(async (image: Express.Multer.File) => {
+            return await uploadImage.upload(image.path);
+        })
+    );
+};
+
+export const deleteStockImages = (images: Express.Multer.File[]) => {
+    return Promise.all(
+        images.map(async (image: Express.Multer.File) => {
+            return await uploadImage.delete(image.path);
+        })
+    );
+};
+
+export const deleteLocalImages = async (images: Express.Multer.File[]) => {
+    await Promise.all(
+        (images as Express.Multer.File[]).map((image: Express.Multer.File) => {
+            deleteOldPhoto(image.path, DEFAULT_STOCK_PHOTO);
+        })
+    );
 };

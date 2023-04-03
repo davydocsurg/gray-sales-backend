@@ -1,6 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { DEFAULT_STOCK_PHOTO } from "../commons/constants";
-import { deleteOldPhoto, Logging, uploadImage } from "../helpers";
+import {
+    deleteLocalImages,
+    deleteOldPhoto,
+    Logging,
+    uploadImage,
+    uploadStockImages,
+} from "../helpers";
 import { Stock } from "../models/v1";
 import { AuthRequest } from "../types";
 
@@ -57,12 +63,8 @@ class StockService {
             images,
         } = this.fetchRequestBody(req);
 
-        const uploadImages = await Promise.all(
-            (images as Express.Multer.File[]).map(
-                async (image: Express.Multer.File) => {
-                    return await uploadImage.upload(image.path);
-                }
-            )
+        const uploadImages = await uploadStockImages(
+            images as Express.Multer.File[]
         );
 
         const stock = await Stock.create({
@@ -79,13 +81,7 @@ class StockService {
             user: req?.user,
         });
 
-        await Promise.all(
-            (images as Express.Multer.File[]).map(
-                (image: Express.Multer.File) => {
-                    deleteOldPhoto(image.path, DEFAULT_STOCK_PHOTO);
-                }
-            )
-        );
+        await deleteLocalImages(images);
 
         return stock;
     }
