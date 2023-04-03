@@ -167,8 +167,8 @@ class StockService {
         const { stockId } = this.fetchRequestParams(req);
         const prevStock = await Stock.findById(stockId);
 
-        const photo = prevStock?.images[0].path;
-        await deleteOldPhoto(photo, DEFAULT_STOCK_PHOTO);
+        const photos = prevStock?.images;
+        await deleteStockImages(photos);
         await Stock.findByIdAndDelete(stockId);
 
         return true;
