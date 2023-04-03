@@ -1,6 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { DEFAULT_STOCK_PHOTO } from "../commons/constants";
-import { deleteOldPhoto } from "../helpers";
+import {
+    deleteLocalImages,
+    deleteOldPhoto,
+    deleteStockImages,
+    Logging,
+    uploadImage,
+    uploadStockImages,
+} from "../helpers";
 import { Stock } from "../models/v1";
 import { AuthRequest } from "../types";
 
@@ -12,7 +19,7 @@ class StockService {
         this.updateStock = this.updateStock.bind(this);
         this.deleteStock = this.deleteStock.bind(this);
         this.fetchUserStocks = this.fetchUserStocks.bind(this);
-        // this.fetchStocksByCategory = this.fetchRequestParams.bind(this);
+        this.fetchStocksByCategory = this.fetchRequestParams.bind(this);
     }
 
     async fetchStocks(res: Response) {
@@ -57,11 +64,16 @@ class StockService {
             images,
         } = this.fetchRequestBody(req);
 
+        const uploadImages = await uploadStockImages(
+            images as Express.Multer.File[]
+        );
+        await deleteLocalImages(images as Express.Multer.File[]);
+
         const stock = await Stock.create({
             title,
             description,
             price,
-            images,
+            images: uploadImages,
             categoryId,
             type,
             location,
@@ -88,7 +100,7 @@ class StockService {
         return stock;
     }
 
-    async updateStock(req: AuthRequest) {
+    async updateStock(req: AuthRequest, res: Response) {
         const {
             title,
             description,
@@ -103,11 +115,19 @@ class StockService {
         } = this.fetchRequestBody(req);
         const { stockId } = this.fetchRequestParams(req);
 
+        const stock = await Stock.findById(stockId);
+
+        if (!stock) {
+            return res.json({
+                success: false,
+                message: "Stock does not exist",
+            });
+        }
+
         const updatedData = {
             title,
             description,
             price,
-            images,
             categoryId,
             type,
             location,
@@ -116,26 +136,39 @@ class StockService {
             listFor,
         };
 
-        const stock = await Stock.findById(stockId);
-
         const updatedStock = await Stock.findByIdAndUpdate(
             stockId,
             updatedData
         );
 
-        const oldPhoto = stock?.images[0].path;
+        if (images) {
+            const uploadedImages = await uploadStockImages(
+                images as Express.Multer.File[]
+            );
 
-        await deleteOldPhoto(oldPhoto, DEFAULT_STOCK_PHOTO);
+            const updatedStock = await Stock.findByIdAndUpdate(
+                stockId,
+                {
+                    images: uploadedImages,
+                },
+                { new: true }
+            );
+            const oldPhoto = stock.images;
+
+            await deleteStockImages(oldPhoto);
+            await deleteLocalImages(images as Express.Multer.File[]);
+            return updatedStock;
+        }
 
         return updatedStock;
     }
 
-    async deleteStock(req: AuthRequest, res: Response, next: NextFunction) {
+    async deleteStock(req: AuthRequest) {
         const { stockId } = this.fetchRequestParams(req);
         const prevStock = await Stock.findById(stockId);
 
-        const photo = prevStock?.images[0].path;
-        await deleteOldPhoto(photo, DEFAULT_STOCK_PHOTO);
+        const photos = prevStock?.images;
+        await deleteStockImages(photos);
         await Stock.findByIdAndDelete(stockId);
 
         return true;

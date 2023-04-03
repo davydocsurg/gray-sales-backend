@@ -3,9 +3,11 @@ import multer from "multer";
 import fs from "fs";
 
 // locals
-import cloudinary from "cloudinary";
 import Logging from "./customLog";
 import { AppError } from "./AppError";
+import cloudinary from "../config/cloudinary";
+import { DEFAULT_STOCK_PHOTO } from "../commons/constants";
+import { Photo } from "../types";
 
 export const stockImageStore = multer.diskStorage({
     destination: (req: Request, file: Express.Multer.File, cb: Function) => {
@@ -33,7 +35,7 @@ export const fileValidation = (
     cb: Function
 ) => {
     const allowedMimeTypes = ["image/jpeg", "image/png", "image/jpg"];
-    if (req.files.length > 4) {
+    if (+req.files.length > 4) {
         const error = new AppError(
             "You can only upload a maximum of 4 images",
             400
@@ -59,26 +61,52 @@ export const deleteOldPhoto = async (
     }
 };
 
-export const uploadImage = async (images: string) => {
-    try {
-        const options = {
-            use_filename: true,
-            unique_filename: false,
-            overwrite: true,
+const stockFileOptions = {
+    folder: "stocks",
+    use_filename: true,
+    unique_filename: false,
+    overwrite: true,
+    resource_type: "image",
+};
+
+export const uploadImage = {
+    upload: async (file: string) => {
+        const result = await cloudinary.uploader.upload(file, stockFileOptions);
+        // Logging.success(result);
+        return {
+            id: result.public_id,
+            title: result.original_filename,
+            // description: result.context?.custom?.description,
+            url: result.secure_url,
         };
+    },
 
-        cloudinary.v2.config({
-            cloud_name: process.env.CLOUD_STORAGE_NAME,
-            api_key: process.env.CLOUD_API_KEY,
-            api_secret: process.env.CLOUD_API_SECRET,
-        });
+    delete: async (file: string) => {
+        const result = await cloudinary.uploader.destroy(file);
+        return result;
+    },
+};
 
-        let filesCount = 0;
-        const uploads: cloudinary.UploadApiResponse[] = [];
+export const uploadStockImages = (images: Express.Multer.File[]) => {
+    return Promise.all(
+        images.map(async (image: Express.Multer.File) => {
+            return await uploadImage.upload(image.path);
+        })
+    );
+};
 
-        const result = await cloudinary.v2.uploader.upload(images, options);
-        Logging.info(result);
-    } catch (error) {
-        Logging.error(error);
-    }
+export const deleteStockImages = (images: Photo[]) => {
+    return Promise.all(
+        images.map(async (image) => {
+            return await uploadImage.delete(image.id);
+        })
+    );
+};
+
+export const deleteLocalImages = async (images: Express.Multer.File[]) => {
+    await Promise.all(
+        (images as Express.Multer.File[]).map((image: Express.Multer.File) => {
+            deleteOldPhoto(image.path, DEFAULT_STOCK_PHOTO);
+        })
+    );
 };
