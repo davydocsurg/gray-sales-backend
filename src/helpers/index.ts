@@ -13,6 +13,7 @@ import {
 import { checkUser, fetchUserStocks } from "./user";
 import { AppError } from "./AppError";
 import { initializePayment, verifyTransaction } from "./payment";
+import calculateDistance from "./distanceCalculator";
 
 export {
     Logging,
@@ -30,4 +31,5 @@ export {
     deleteStockImages,
     uploadStockImages,
     deleteLocalImages,
+    calculateDistance,
 };
