@@ -48,13 +48,14 @@ class StockService {
                     stockLat,
                     stockLong
                 );
+
                 return {
                     ...stock.toObject(),
                     distance,
                 };
             })
             .filter(
-                (value: any, index: number, array: any[]) => value.distance < 10
+                (value: any, index: number, array: any[]) => value.distance < 10 // filter stocks that are closer than 10km
             );
 
         return nearByStocks;

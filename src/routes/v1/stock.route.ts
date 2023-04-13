@@ -7,7 +7,11 @@ import { ValidateCreateStockRequest } from "../../middlewares/validators";
 
 const stockRoutes = express.Router();
 
-stockRoutes.get("/fetch", catchAsync(StockController.fetchStocks));
+stockRoutes.get(
+    "/fetch",
+    isAuthenticated,
+    catchAsync(StockController.fetchStocks)
+);
 
 // ValidateCreateStockRequest,
 stockRoutes.post(
