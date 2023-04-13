@@ -39,8 +39,20 @@ const StockSchema: Schema = new mongoose.Schema<StockType>(
 
         location: {
             // location to include longitude and latitude
-            type: String,
-            required: [true, "Location is required"],
+            type: {
+                type: String,
+                enum: ["Point"],
+                required: true,
+            },
+            coordinates: {
+                type: [Number],
+                required: true,
+            },
+            index: {
+                type: String,
+                enum: ["2dsphere"],
+                required: true,
+            },
         },
 
         pickUpTimes: {
