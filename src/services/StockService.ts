@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { DEFAULT_STOCK_PHOTO } from "../commons/constants";
 import {
+    calculateDistance,
     deleteLocalImages,
     deleteOldPhoto,
     deleteStockImages,
@@ -9,7 +10,7 @@ import {
     uploadStockImages,
 } from "../helpers";
 import { Stock } from "../models/v1";
-import { AuthRequest } from "../types";
+import { AuthRequest, StockType } from "../types";
 
 class StockService {
     constructor() {
@@ -22,17 +23,41 @@ class StockService {
         this.fetchStocksByCategory = this.fetchRequestParams.bind(this);
     }
 
-    async fetchStocks(res: Response) {
-        const stocksCount = this.countStocks();
-        const stocks = (await Stock.find()).reverse();
+    async fetchNearByStocks(req: AuthRequest, res: Response) {
+        const userLat = req.user.location.coordinates[1];
+        const userLong = req.user.location.coordinates[0];
 
+        const stocksCount = this.countStocks();
         if (!stocksCount) {
             return res.json({
                 message: "No stocks found",
             });
         }
 
-        return stocks;
+        // fetch stocks with locations closer to the auth user's location
+        const stocks: StockType[] = await Stock.find();
+
+        const nearByStocks = stocks
+            .map((stock: StockType) => {
+                const stockLat = stock.pickupLocation.coordinates[1];
+                const stockLong = stock.pickupLocation.coordinates[0];
+
+                const distance = calculateDistance(
+                    userLat,
+                    userLong,
+                    stockLat,
+                    stockLong
+                );
+                return {
+                    ...stock.toObject(),
+                    distance,
+                };
+            })
+            .filter(
+                (value: any, index: number, array: any[]) => value.distance < 10
+            );
+
+        return nearByStocks;
     }
 
     async countStocks() {

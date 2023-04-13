@@ -37,7 +37,7 @@ const StockSchema: Schema = new mongoose.Schema<StockType>(
             },
         },
 
-        location: {
+        pickupLocation: {
             // location to include longitude and latitude
             type: {
                 type: String,

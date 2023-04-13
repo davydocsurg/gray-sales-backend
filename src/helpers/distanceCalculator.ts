@@ -1,7 +1,7 @@
 const calculateDistance = (
     lat1: number,
-    lat2: number,
     long1: number,
+    lat2: number,
     long2: number
 ) => {
     // calculate distance between two sets of coordinates using Haversine formula

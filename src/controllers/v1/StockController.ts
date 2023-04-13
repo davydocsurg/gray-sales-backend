@@ -18,7 +18,7 @@ class StockController {
         this.fetchUserStocks = this.fetchUserStocks.bind(this);
     }
 
-    async fetchStocks(req: Request, res: Response, next: NextFunction) {
+    async fetchStocks(req: AuthRequest, res: Response, next: NextFunction) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.json({
@@ -27,7 +27,7 @@ class StockController {
         }
         try {
             const stocksCount = await StockService.countStocks();
-            const stocks = await StockService.fetchStocks(res);
+            const stocks = await StockService.fetchNearByStocks(req, res);
 
             return res.status(200).json({
                 success: true,
