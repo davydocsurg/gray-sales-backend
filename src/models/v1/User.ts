@@ -3,10 +3,10 @@ import validator from "validator";
 import slugify from "slugify";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import { Item } from "../../types";
+import { Item, UserType } from "../../types";
 import { Logging } from "../../helpers";
 
-const UserSchema: Schema = new mongoose.Schema(
+const UserSchema: Schema = new mongoose.Schema<UserType>(
     {
         firstName: {
             type: String,
@@ -73,6 +73,17 @@ const UserSchema: Schema = new mongoose.Schema(
                     return el === this.password;
                 },
                 message: "Passwords don't match",
+            },
+        },
+        location: {
+            type: {
+                type: String,
+                enum: ["Point"],
+                required: true,
+            },
+            coordinates: {
+                type: [Number],
+                required: true,
             },
         },
         passwordChangedAt: Date,
