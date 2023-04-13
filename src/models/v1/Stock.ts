@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
+import { StockType } from "../../types";
 
-const StockSchema: Schema = new mongoose.Schema(
+const StockSchema: Schema = new mongoose.Schema<StockType>(
     {
         title: {
             type: String,
@@ -60,7 +61,7 @@ const StockSchema: Schema = new mongoose.Schema(
         },
 
         images: {
-            type: Array,
+            type: [String],
             required: [true, "At least one image is required"],
         },
 
