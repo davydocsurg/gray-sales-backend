@@ -26,7 +26,6 @@ class StockController {
             });
         }
         try {
-            const stocksCount = await StockService.countStocks();
             const stocks = await StockService.fetchNearByStocks(req, res);
 
             return res.status(200).json({
@@ -34,7 +33,6 @@ class StockController {
                 results: 1,
                 data: {
                     stocks,
-                    stocksCount,
                 },
             });
         } catch (error: unknown) {

@@ -29,7 +29,8 @@ class StockService {
 
         const stocksCount = this.countStocks();
         if (!stocksCount) {
-            return res.json({
+            return res.status(404).json({
+                success: false,
                 message: "No stocks found",
             });
         }
@@ -58,7 +59,9 @@ class StockService {
                 (value: any, index: number, array: any[]) => value.distance < 10 // filter stocks that are closer than 10km
             );
 
-        return nearByStocks;
+        const nearByStocksCount = nearByStocks.length;
+
+        return { nearByStocks, nearByStocksCount };
     }
 
     async countStocks() {
@@ -135,7 +138,7 @@ class StockService {
             price,
             categoryId,
             type,
-            location,
+            pickupLocation,
             pickUpTimes,
             listFor,
             quantity,
@@ -158,7 +161,7 @@ class StockService {
             price,
             categoryId,
             type,
-            location,
+            pickupLocation,
             pickUpTimes,
             quantity,
             listFor,
