@@ -36,8 +36,14 @@ class AuthService {
 
     async registerUser(req: Request, res: Response, next: NextFunction) {
         // try {
-        const { firstName, lastName, email, password, passwordConfirmation } =
-            this.fetchRequest(req);
+        const {
+            firstName,
+            lastName,
+            email,
+            password,
+            passwordConfirmation,
+            location,
+        } = this.fetchRequest(req);
 
         const userExists = await checkUser(email, res, next);
         if (userExists) {
@@ -53,6 +59,7 @@ class AuthService {
             email,
             password,
             passwordConfirmation,
+            location,
             type: "vendor",
             verificationStatus: "unverfied",
             cart: { items: [] },
@@ -82,8 +89,14 @@ class AuthService {
     async logout(req: Request, res: Response, next: NextFunction) {}
 
     fetchRequest(req: Request) {
-        const { firstName, lastName, email, password, passwordConfirmation } =
-            req.body;
+        const {
+            firstName,
+            lastName,
+            email,
+            password,
+            passwordConfirmation,
+            location,
+        } = req.body;
 
         return {
             firstName,
@@ -91,6 +104,7 @@ class AuthService {
             email,
             password,
             passwordConfirmation,
+            location,
         };
     }
 }

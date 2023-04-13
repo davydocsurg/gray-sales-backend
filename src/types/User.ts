@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { Document, Schema } from "mongoose";
 
 type CartType = {
     items: [
@@ -53,6 +53,5 @@ type UserType = {
         };
         coordinates: [number, number];
     };
-};
-
+} & Document;
 export default UserType;

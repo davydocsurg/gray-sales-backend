@@ -14,7 +14,7 @@ import { AuthRequest, StockType } from "../types";
 
 class StockService {
     constructor() {
-        this.fetchStocks = this.fetchStocks.bind(this);
+        this.fetchNearByStocks = this.fetchNearByStocks.bind(this);
         this.createStock = this.createStock.bind(this);
         this.fetchStock = this.fetchStock.bind(this);
         this.updateStock = this.updateStock.bind(this);
