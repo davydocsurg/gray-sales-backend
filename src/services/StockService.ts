@@ -82,12 +82,14 @@ class StockService {
             price,
             categoryId,
             type,
-            location,
+            pickupLocation,
             pickUpTimes,
             listFor,
             quantity,
             images,
         } = this.fetchRequestBody(req);
+        let loc = JSON.parse(pickupLocation);
+        // return Logging.info(loc.type);
 
         const uploadImages = await uploadStockImages(
             images as Express.Multer.File[]
@@ -101,7 +103,7 @@ class StockService {
             images: uploadImages,
             categoryId,
             type,
-            location,
+            pickupLocation: loc,
             pickUpTimes,
             listFor,
             quantity,
@@ -215,7 +217,7 @@ class StockService {
             price,
             categoryId,
             type,
-            location,
+            pickupLocation,
             pickUpTimes,
             listFor,
             quantity,
@@ -228,7 +230,7 @@ class StockService {
             price,
             categoryId,
             type,
-            location,
+            pickupLocation,
             pickUpTimes,
             listFor,
             quantity,

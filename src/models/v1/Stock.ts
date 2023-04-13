@@ -48,11 +48,11 @@ const StockSchema: Schema = new mongoose.Schema<StockType>(
                 type: [Number],
                 required: true,
             },
-            index: {
-                type: String,
-                enum: ["2dsphere"],
-                required: true,
-            },
+            // index: {
+            //     type: String,
+            //     enum: ["2dsphere"],
+            //     required: true,
+            // },
         },
 
         pickUpTimes: {
@@ -73,7 +73,7 @@ const StockSchema: Schema = new mongoose.Schema<StockType>(
         },
 
         images: {
-            type: [String],
+            type: Array,
             required: [true, "At least one image is required"],
         },
 

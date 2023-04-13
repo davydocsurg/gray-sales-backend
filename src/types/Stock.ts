@@ -8,11 +8,11 @@ type StockType = {
     pickupLocation: {
         type: "Point";
         coordinates: [number, number]; // [longitude, latitude]
-        index: "2dsphere";
+        // index: "2dsphere";
     };
     pickUpTimes: string;
     listFor: number;
-    images: string[];
+    images: string[] | any;
     quantity: number;
     categoryId: Schema.Types.ObjectId;
     user?: Schema.Types.ObjectId;
